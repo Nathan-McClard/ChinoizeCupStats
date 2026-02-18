@@ -104,7 +104,8 @@ const syncLog = pgTable("sync_log", {
 
 // ── Helpers ─────────────────────────────────────────────────────────
 
-const API_BASE = process.env.LIMITLESS_API_BASE_URL;
+const LIMITLESS_HOST = "play.limitlesstcg.com";
+const API_BASE = process.env.LIMITLESS_API_BASE_URL || `https://${LIMITLESS_HOST}/api`;
 const BATCH_SIZE = 100;
 const API_DELAY = 4000; // ms between Limitless API calls
 

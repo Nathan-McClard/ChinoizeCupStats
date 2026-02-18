@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1e3a6e"/>
+      <stop offset="100%" stop-color="#0f1d3a"/>
+    </linearGradient>
+    <linearGradient id="gold1" x1="180" y1="80" x2="332" y2="432" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffd866"/>
+      <stop offset="50%" stop-color="#f0a830"/>
+      <stop offset="100%" stop-color="#c88a10"/>
+    </linearGradient>
+    <linearGradient id="blue1" x1="200" y1="100" x2="340" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6a9eed"/>
+      <stop offset="100%" stop-color="#4a78c9"/>
+    </linearGradient>
+    <linearGradient id="goldSoft1" x1="256" y1="80" x2="256" y2="432" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffe599"/>
+      <stop offset="100%" stop-color="#cc8800"/>
+    </linearGradient>
+    <clipPath id="roundedBg1">
+      <rect width="512" height="512" rx="112"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg1)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.04" stroke="#fff" stroke-width="1">
+    <line x1="128" y1="0" x2="128" y2="512"/>
+    <line x1="256" y1="0" x2="256" y2="512"/>
+    <line x1="384" y1="0" x2="384" y2="512"/>
+    <line x1="0" y1="128" x2="512" y2="128"/>
+    <line x1="0" y1="256" x2="512" y2="256"/>
+    <line x1="0" y1="384" x2="512" y2="384"/>
+  </g>
+
+  <!-- Trophy cup body -->
+  <path d="M186 140 h140 l-16 180 c-2 24-22 42-46 46 h-16 c-24-4-44-22-46-46 Z" fill="url(#gold1)" opacity="0.9"/>
+
+  <!-- Trophy handles -->
+  <path d="M186 160 c-50 0-60 40-50 80 c8 32 36 48 58 48" stroke="url(#gold1)" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M326 160 c50 0 60 40 50 80 c-8 32-36 48-58 48" stroke="url(#gold1)" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- Trophy base -->
+  <rect x="222" y="370" width="68" height="16" rx="4" fill="url(#gold1)" opacity="0.8"/>
+  <rect x="206" y="386" width="100" height="12" rx="4" fill="url(#gold1)" opacity="0.7"/>
+  <rect x="198" y="398" width="116" height="14" rx="6" fill="url(#gold1)" opacity="0.9"/>
+
+  <!-- Bar chart inside trophy -->
+  <g opacity="0.95">
+    <rect x="218" y="240" width="22" height="80" rx="4" fill="url(#bg1)"/>
+    <rect x="245" y="200" width="22" height="120" rx="4" fill="url(#bg1)"/>
+    <rect x="272" y="220" width="22" height="100" rx="4" fill="url(#bg1)"/>
+  </g>
+
+  <!-- Mini bar chart accents (lighter inside bars) -->
+  <g opacity="0.6">
+    <rect x="220" y="242" width="18" height="76" rx="3" fill="url(#blue1)"/>
+    <rect x="247" y="202" width="18" height="116" rx="3" fill="url(#blue1)"/>
+    <rect x="274" y="222" width="18" height="96" rx="3" fill="url(#blue1)"/>
+  </g>
+
+  <!-- Trend line over bars -->
+  <polyline points="229,248 256,208 283,228" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+  <circle cx="229" cy="248" r="4" fill="#fff" opacity="0.9"/>
+  <circle cx="256" cy="208" r="4" fill="#fff" opacity="0.9"/>
+  <circle cx="283" cy="228" r="4" fill="#fff" opacity="0.9"/>
+
+  <!-- Playing card (tilted behind trophy) -->
+  <g transform="rotate(-15 380 140)" opacity="0.35">
+    <rect x="340" y="80" width="70" height="100" rx="8" fill="#fff"/>
+    <rect x="344" y="84" width="62" height="92" rx="6" stroke="url(#gold1)" stroke-width="1.5" fill="none"/>
+    <!-- Spade symbol -->
+    <path d="M375 110 c0-12 18-20 18-8 c0 10-10 14-14 20 h-8 c-4-6-14-10-14-20 c0-12 18-4 18 8z" fill="url(#gold1)"/>
+  </g>
+
+  <!-- Playing card (tilted other side) -->
+  <g transform="rotate(12 130 140)" opacity="0.35">
+    <rect x="90" y="80" width="70" height="100" rx="8" fill="#fff"/>
+    <rect x="94" y="84" width="62" height="92" rx="6" stroke="url(#gold1)" stroke-width="1.5" fill="none"/>
+    <!-- Diamond symbol -->
+    <polygon points="125,100 137,120 125,140 113,120" fill="url(#gold1)"/>
+  </g>
+
+  <!-- Star sparkles -->
+  <g fill="url(#goldSoft1)" opacity="0.6">
+    <polygon points="256,100 260,112 272,112 262,120 266,132 256,124 246,132 250,120 240,112 252,112" transform="scale(0.6) translate(170,-20)"/>
+    <circle cx="160" cy="260" r="3"/>
+    <circle cx="352" cy="260" r="3"/>
+  </g>
+
+  <!-- Text: CC -->
+  <text x="256" y="456" text-anchor="middle" font-family="'Inter','Helvetica Neue',sans-serif" font-weight="800" font-size="36" fill="url(#goldSoft1)" letter-spacing="6" opacity="0.8">CC</text>
+</svg>

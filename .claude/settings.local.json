@@ -88,7 +88,8 @@
       "WebFetch(domain:dribbble.com)",
       "Bash(npx drizzle-kit generate:*)",
       "Bash(npx drizzle-kit push:*)",
-      "Bash(npx dotenv:*)"
+      "Bash(npx dotenv:*)",
+      "Bash(echo:*)"
     ]
   }
 }

@@ -12,7 +12,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { Logo } from "@/components/ui/logo";
+
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -32,10 +32,9 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
     <div className="flex flex-col h-full">
       <div className="p-6 border-b border-border">
         <Link href="/" className="flex items-center gap-3" onClick={onNavigate}>
-          <Logo size={40} className="rounded-xl" />
           <div>
             <h1 className="text-lg font-bold text-foreground tracking-tight">
-              ChinoizeCupStats
+              Chinoize Cup Stats
             </h1>
             <p className="text-xs text-muted-foreground">
               OP TCG Meta Snapshot
@@ -71,9 +70,16 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
         })}
       </nav>
 
-      <div className="p-4 border-t border-border">
-        <p className="text-xs text-muted-foreground text-center">
-          Data from Limitless TCG
+      <div className="p-4 border-t border-border text-center">
+        <p className="text-xs text-muted-foreground">
+          &copy; 2026 Captivat3 &middot;{" "}
+          <Link
+            href="/about"
+            onClick={onNavigate}
+            className="hover:text-foreground transition-colors"
+          >
+            About
+          </Link>
         </p>
       </div>
     </div>

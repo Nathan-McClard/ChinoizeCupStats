@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1e3a6e"/>
+      <stop offset="100%" stop-color="#0f1d3a"/>
+    </linearGradient>
+    <linearGradient id="gold4" x1="180" y1="80" x2="332" y2="432" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffd866"/>
+      <stop offset="50%" stop-color="#f0a830"/>
+      <stop offset="100%" stop-color="#c88a10"/>
+    </linearGradient>
+    <linearGradient id="goldSoft4" x1="256" y1="60" x2="256" y2="452" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffe599"/>
+      <stop offset="100%" stop-color="#cc8800"/>
+    </linearGradient>
+    <linearGradient id="blue4" x1="160" y1="160" x2="352" y2="352" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6a9eed"/>
+      <stop offset="100%" stop-color="#4a78c9"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg4)"/>
+
+  <!-- Outer compass ring -->
+  <circle cx="256" cy="256" r="200" stroke="url(#goldSoft4)" stroke-width="3" fill="none" opacity="0.25"/>
+  <circle cx="256" cy="256" r="192" stroke="url(#goldSoft4)" stroke-width="1" fill="none" opacity="0.12"/>
+
+  <!-- Compass tick marks (12 total like a clock) -->
+  <g stroke="url(#goldSoft4)" stroke-width="2" opacity="0.25">
+    <line x1="256" y1="56" x2="256" y2="76"/>
+    <line x1="256" y1="436" x2="256" y2="456"/>
+    <line x1="56" y1="256" x2="76" y2="256"/>
+    <line x1="436" y1="256" x2="456" y2="256"/>
+  </g>
+  <g stroke="url(#goldSoft4)" stroke-width="1.5" opacity="0.15">
+    <line x1="115" y1="115" x2="129" y2="129"/>
+    <line x1="383" y1="383" x2="397" y2="397"/>
+    <line x1="397" y1="115" x2="383" y2="129"/>
+    <line x1="115" y1="383" x2="129" y2="397"/>
+  </g>
+
+  <!-- Donut chart (outer ring = stats, inner = compass) -->
+  <!-- Donut segment 1 — 40% (144 deg, starting from top) -->
+  <path d="M256 80 A176 176 0 0 1 416 336" stroke="#4a78c9" stroke-width="28" fill="none" stroke-linecap="butt" opacity="0.8"/>
+  <!-- Donut segment 2 — 22% -->
+  <path d="M416 336 A176 176 0 0 1 218 430" stroke="#6a9eed" stroke-width="28" fill="none" stroke-linecap="butt" opacity="0.65"/>
+  <!-- Donut segment 3 — 18% -->
+  <path d="M218 430 A176 176 0 0 1 96 336" stroke="url(#goldSoft4)" stroke-width="28" fill="none" stroke-linecap="butt" opacity="0.55"/>
+  <!-- Donut segment 4 — 20% -->
+  <path d="M96 336 A176 176 0 0 1 256 80" stroke="#30d158" stroke-width="28" fill="none" stroke-linecap="butt" opacity="0.5"/>
+
+  <!-- Inner circle (compass area) -->
+  <circle cx="256" cy="256" r="120" fill="url(#bg4)" stroke="url(#goldSoft4)" stroke-width="1.5" opacity="0.9"/>
+
+  <!-- Compass rose inside -->
+  <!-- North -->
+  <polygon points="256,148 270,236 256,224 242,236" fill="url(#gold4)" opacity="0.9"/>
+  <!-- South -->
+  <polygon points="256,364 270,276 256,288 242,276" fill="url(#gold4)" opacity="0.5"/>
+  <!-- East -->
+  <polygon points="364,256 276,242 288,256 276,270" fill="url(#gold4)" opacity="0.5"/>
+  <!-- West -->
+  <polygon points="148,256 236,242 224,256 236,270" fill="url(#gold4)" opacity="0.9"/>
+
+  <!-- Center point -->
+  <circle cx="256" cy="256" r="16" fill="url(#gold4)" opacity="0.85"/>
+  <circle cx="256" cy="256" r="9" fill="url(#bg4)"/>
+  <circle cx="256" cy="256" r="3.5" fill="url(#gold4)" opacity="0.9"/>
+
+  <!-- Small playing card icon at N position -->
+  <g transform="translate(256, 62)" opacity="0.5">
+    <rect x="-10" y="-14" width="20" height="28" rx="3" fill="#fff" opacity="0.9"/>
+    <text x="0" y="4" text-anchor="middle" font-family="serif" font-size="14" font-weight="bold" fill="url(#bg4)">A</text>
+  </g>
+
+  <!-- Stats text at cardinal points -->
+  <g font-family="'JetBrains Mono','SF Mono',monospace" font-size="11" fill="url(#goldSoft4)" opacity="0.4" text-anchor="middle">
+    <text x="452" y="260">W</text>
+    <text x="60" y="260">L</text>
+    <text x="256" y="450">%</text>
+  </g>
+
+  <!-- "CHINOIZE CUP" small text -->
+  <text x="256" y="486" text-anchor="middle" font-family="'Inter','Helvetica Neue',sans-serif" font-weight="700" font-size="18" fill="url(#goldSoft4)" letter-spacing="5" opacity="0.6">CHINOIZE CUP</text>
+</svg>

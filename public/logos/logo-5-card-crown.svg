@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bg5" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1e3a6e"/>
+      <stop offset="100%" stop-color="#0f1d3a"/>
+    </linearGradient>
+    <linearGradient id="gold5" x1="180" y1="60" x2="332" y2="450" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffd866"/>
+      <stop offset="50%" stop-color="#f0a830"/>
+      <stop offset="100%" stop-color="#c88a10"/>
+    </linearGradient>
+    <linearGradient id="goldSoft5" x1="256" y1="60" x2="256" y2="452" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffe599"/>
+      <stop offset="100%" stop-color="#cc8800"/>
+    </linearGradient>
+    <linearGradient id="cardFace" x1="170" y1="100" x2="342" y2="430" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a3060"/>
+      <stop offset="100%" stop-color="#0e1b38"/>
+    </linearGradient>
+    <linearGradient id="blue5" x1="200" y1="200" x2="320" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6a9eed"/>
+      <stop offset="100%" stop-color="#4a78c9"/>
+    </linearGradient>
+    <filter id="cardGlow">
+      <feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#c88a10" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg5)"/>
+
+  <!-- Subtle diamond pattern -->
+  <g opacity="0.03" fill="#fff">
+    <polygon points="256,40 296,80 256,120 216,80"/>
+    <polygon points="128,120 168,160 128,200 88,160"/>
+    <polygon points="384,120 424,160 384,200 344,160"/>
+    <polygon points="128,320 168,360 128,400 88,360"/>
+    <polygon points="384,320 424,360 384,400 344,360"/>
+  </g>
+
+  <!-- Main card shape -->
+  <g filter="url(#cardGlow)">
+    <rect x="146" y="76" width="220" height="320" rx="18" fill="url(#cardFace)" stroke="url(#gold5)" stroke-width="3"/>
+  </g>
+
+  <!-- Card inner border -->
+  <rect x="158" y="88" width="196" height="296" rx="12" fill="none" stroke="url(#goldSoft5)" stroke-width="1" opacity="0.2"/>
+
+  <!-- Crown at top of card -->
+  <g transform="translate(256, 118)" opacity="0.95">
+    <path d="M-42 18 L-32-12 L-16 6 L0-24 L16 6 L32-12 L42 18 Z" fill="url(#gold5)"/>
+    <rect x="-44" y="18" width="88" height="10" rx="3" fill="url(#gold5)" opacity="0.9"/>
+    <!-- Crown jewels -->
+    <circle cx="0" cy="-8" r="4" fill="#ff3b30" opacity="0.7"/>
+    <circle cx="-16" cy="4" r="3" fill="url(#bg5)" opacity="0.5"/>
+    <circle cx="16" cy="4" r="3" fill="url(#bg5)" opacity="0.5"/>
+  </g>
+
+  <!-- Area chart / trend in center of card -->
+  <g transform="translate(0, 30)">
+    <!-- Area fill -->
+    <path d="M180 310 L210 270 L240 285 L270 240 L300 220 L330 195 L330 310 Z" fill="url(#blue5)" opacity="0.25"/>
+    <!-- Trend line -->
+    <polyline points="180,310 210,270 240,285 270,240 300,220 330,195"
+              stroke="#4a78c9" stroke-width="3" fill="none"
+              stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+    <!-- Data points -->
+    <g fill="#fff" opacity="0.9">
+      <circle cx="180" cy="310" r="3.5"/>
+      <circle cx="210" cy="270" r="3.5"/>
+      <circle cx="240" cy="285" r="3.5"/>
+      <circle cx="270" cy="240" r="3.5"/>
+      <circle cx="300" cy="220" r="3.5"/>
+      <circle cx="330" cy="195" r="3.5"/>
+    </g>
+  </g>
+
+  <!-- Card corner markings (like playing cards) -->
+  <g font-family="'JetBrains Mono','SF Mono',monospace" fill="url(#goldSoft5)">
+    <!-- Top left -->
+    <text x="172" y="116" font-size="18" font-weight="bold" opacity="0.7">C</text>
+    <!-- Bottom right (rotated) -->
+    <text x="340" y="372" font-size="18" font-weight="bold" opacity="0.7" transform="rotate(180 340 366)">C</text>
+  </g>
+
+  <!-- Card suit - custom star/compass hybrid below crown -->
+  <g transform="translate(256, 170)" fill="url(#goldSoft5)" opacity="0.3">
+    <polygon points="0,-12 3,-4 12,-4 5,2 7,10 0,6 -7,10 -5,2 -12,-4 -3,-4"/>
+  </g>
+
+  <!-- Horizontal divider lines on card -->
+  <line x1="178" y1="188" x2="334" y2="188" stroke="url(#goldSoft5)" stroke-width="1" opacity="0.15"/>
+  <line x1="178" y1="350" x2="334" y2="350" stroke="url(#goldSoft5)" stroke-width="1" opacity="0.15"/>
+
+  <!-- Win rate numbers -->
+  <g font-family="'JetBrains Mono','SF Mono',monospace" text-anchor="middle">
+    <text x="256" y="374" font-size="20" font-weight="700" fill="url(#goldSoft5)" letter-spacing="2" opacity="0.65">62.4%</text>
+  </g>
+
+  <!-- "CHINOIZE" below card -->
+  <text x="256" y="432" text-anchor="middle" font-family="'Inter','Helvetica Neue',sans-serif" font-weight="900" font-size="26" fill="url(#goldSoft5)" letter-spacing="4" opacity="0.75">CHINOIZE</text>
+  <text x="256" y="458" text-anchor="middle" font-family="'Inter','Helvetica Neue',sans-serif" font-weight="500" font-size="14" fill="url(#goldSoft5)" letter-spacing="8" opacity="0.45">CUP STATS</text>
+</svg>

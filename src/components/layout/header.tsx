@@ -2,7 +2,6 @@
 
 import { MobileSidebar } from "./sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { Logo } from "@/components/ui/logo";
 
 interface HeaderProps {
   title?: string;
@@ -16,7 +15,6 @@ export function Header({ title, description }: HeaderProps) {
         <MobileSidebar />
 
         <div className="flex items-center gap-3 lg:hidden">
-          <Logo size={32} className="rounded-lg" />
           <span className="font-bold text-foreground">ChinoizeCupStats</span>
         </div>
 

@@ -4,8 +4,7 @@ import type {
   Pairing,
 } from "./types";
 
-const BASE_URL =
-  process.env.LIMITLESS_API_BASE_URL || "https://play.limitlesstcg.com/api";
+const BASE_URL = process.env.LIMITLESS_API_BASE_URL!;
 
 async function fetchJson<T>(
   path: string,

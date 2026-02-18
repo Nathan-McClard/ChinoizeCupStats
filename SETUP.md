@@ -63,7 +63,7 @@ Open `.env.local` and fill in the values:
 
 ```env
 DATABASE_URL=postgresql://postgres.[project-ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres
-LIMITLESS_API_BASE_URL=https://play.limitlesstcg.com/api
+LIMITLESS_API_BASE_URL=(see Limitless TCG API docs)
 CRON_SECRET=any-random-secret-string-you-choose
 ```
 
@@ -236,7 +236,7 @@ Add all three:
 | Variable | Value |
 |----------|-------|
 | `DATABASE_URL` | Your Supabase **transaction mode** connection string (port 6543) |
-| `LIMITLESS_API_BASE_URL` | `https://play.limitlesstcg.com/api` |
+| `LIMITLESS_API_BASE_URL` | `(see Limitless TCG API docs)` |
 | `CRON_SECRET` | Same secret you used locally |
 
 ### 6e. Redeploy

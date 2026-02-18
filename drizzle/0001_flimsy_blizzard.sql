@@ -1,0 +1,2 @@
+CREATE INDEX "decklist_cards_card_set_idx" ON "decklist_cards" USING btree ("card_set");--> statement-breakpoint
+CREATE INDEX "decklist_cards_tournament_id_idx" ON "decklist_cards" USING btree ("tournament_id");

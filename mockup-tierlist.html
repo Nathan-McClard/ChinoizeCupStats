@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tier List — ChinoizeStats</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ═══ TOKENS ═══ */
+    :root {
+      --bg: #ffffff; --bg-subtle: #fafafa;
+      --card: #f5f5f7; --card-elevated: #ffffff;
+      --text: #1d1d1f; --text-2: #86868b; --text-3: #aeaeb2;
+      --border: rgba(0,0,0,0.08); --border-strong: rgba(0,0,0,0.12);
+      --overlay: rgba(0,0,0,0.03); --overlay-strong: rgba(0,0,0,0.06);
+      --primary: #1e3a6e; --primary-faint: rgba(30,58,110,0.08);
+      --tier-s: #ff9f0a; --tier-a: var(--primary); --tier-b: #5ac8fa;
+      --tier-c: #636366; --tier-u: #aeaeb2;
+      --success: #34c759; --error: #ff3b30; --warning: #ff9500;
+      --r: 14px; --r-sm: 8px; --r-xs: 6px;
+    }
+    .dark {
+      --bg: #161618; --bg-subtle: #1a1a1c;
+      --card: #1e1e21; --card-elevated: #252528;
+      --text: #f5f5f7; --text-2: #a1a1a6; --text-3: #636366;
+      --border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.12);
+      --overlay: rgba(255,255,255,0.03); --overlay-strong: rgba(255,255,255,0.06);
+      --primary: #4a78c9; --primary-faint: rgba(74,120,201,0.08);
+    }
+
+    /* ═══ BASE ═══ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.5; -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .serif { font-family: 'Instrument Serif', serif; }
+
+    /* ═══ LAYOUT ═══ */
+    .page { max-width: 1280px; margin: 0 auto; padding: 32px 24px 80px; }
+
+    /* ═══ HEADER ═══ */
+    .page-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 16px; margin-bottom: 32px;
+      animation: fadeInUp .6s cubic-bezier(.16,1,.3,1) both;
+    }
+    .page-title {
+      font-size: 28px; font-weight: 700; letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    .page-subtitle { font-size: 14px; color: var(--text-2); margin-top: 4px; }
+    .format-badge { color: var(--primary); font-weight: 600; }
+    .header-controls { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .theme-toggle {
+      width: 36px; height: 36px; border-radius: var(--r-sm);
+      border: 1px solid var(--border); background: var(--overlay);
+      color: var(--text-2); cursor: pointer; display: grid; place-items: center;
+      font-size: 16px; transition: all .2s;
+    }
+    .theme-toggle:hover { background: var(--overlay-strong); color: var(--text); }
+    .format-select select {
+      appearance: none; padding: 8px 32px 8px 12px; border-radius: var(--r-sm);
+      border: 1px solid var(--border); background: var(--overlay);
+      color: var(--text); font: inherit; font-size: 13px; font-weight: 500;
+      cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23a1a1a6' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M3 5l3 3 3-3'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+    }
+
+    /* ═══ TIER NAV ═══ */
+    .tier-nav-row {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; margin-bottom: 40px;
+      animation: fadeInUp .6s cubic-bezier(.16,1,.3,1) .1s both;
+    }
+    .tier-pills { display: flex; gap: 4px; }
+    .tier-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border-radius: var(--r-sm);
+      text-decoration: none; color: var(--text); font-size: 12px; font-weight: 500;
+      transition: background .2s; cursor: pointer;
+    }
+    .tier-pill:hover { background: var(--overlay-strong); }
+    .tier-pill-dot {
+      width: 8px; height: 8px; border-radius: 3px; flex-shrink: 0;
+    }
+    .tier-pill-count { font-family: 'JetBrains Mono', monospace; color: var(--text-2); }
+    .method-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border-radius: var(--r-sm);
+      border: 1px solid var(--border); background: var(--overlay);
+      color: var(--text-2); font: inherit; font-size: 12px; cursor: pointer;
+      transition: all .2s;
+    }
+    .method-btn:hover { color: var(--text); background: var(--overlay-strong); }
+
+    /* ═══ SECTIONS ═══ */
+    .tier-section {
+      margin-bottom: 64px;
+      opacity: 0; transform: translateY(24px); filter: blur(4px);
+      transition: all .7s cubic-bezier(.16,1,.3,1);
+    }
+    .tier-section.visible { opacity: 1; transform: none; filter: none; }
+
+    /* ═══ S TIER — SHOWCASE ═══ */
+    .s-container {
+      position: relative; overflow: hidden;
+      border-radius: calc(var(--r) + 4px);
+      background: var(--overlay);
+      border: 1px solid var(--border);
+      padding: 28px;
+    }
+    .s-accent {
+      position: absolute; inset: 0 0 auto; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--tier-s) 30%, var(--tier-s) 70%, transparent);
+      opacity: .4;
+    }
+    .s-glow {
+      position: absolute; top: -80px; left: -80px; width: 360px; height: 360px;
+      background: radial-gradient(circle, var(--tier-s), transparent 70%);
+      opacity: .03; pointer-events: none;
+    }
+    .s-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; margin-bottom: 24px; position: relative;
+    }
+    .s-header-left { display: flex; align-items: center; gap: 14px; }
+    .tier-letter {
+      font-family: 'Instrument Serif', serif;
+      font-size: 40px; line-height: 1; font-weight: 400;
+    }
+    .tier-letter-s { color: var(--tier-s); }
+    .tier-letter-a { color: var(--tier-a); }
+    .tier-letter-b { color: var(--tier-b); }
+    .tier-letter-c { color: var(--tier-c); }
+    .tier-info h2 { font-size: 16px; font-weight: 600; line-height: 1.3; }
+    .tier-info p { font-size: 11px; color: var(--text-2); }
+    .stat-chips { display: flex; gap: 8px; }
+    .stat-chip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 10px; border-radius: var(--r-sm);
+      background: var(--overlay-strong);
+    }
+    .stat-chip-label { font-size: 11px; color: var(--text-2); }
+    .stat-chip-value { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; }
+    .s-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px; position: relative;
+    }
+
+    /* ═══ CARD — S TIER ═══ */
+    .card {
+      position: relative; overflow: hidden;
+      border-radius: var(--r); background: var(--card);
+      border: 1px solid var(--border);
+      transition: all .3s cubic-bezier(.16,1,.3,1);
+    }
+    .card:hover { transform: translateY(-4px); }
+    .dark .card:hover {
+      box-shadow: 0 12px 32px rgba(0,0,0,.3);
+      border-color: rgba(255,255,255,.12);
+    }
+    :root:not(.dark) .card:hover {
+      box-shadow: 0 12px 32px rgba(0,0,0,.08);
+    }
+    .card-s:hover { border-color: rgba(255,159,10,.15); }
+    .dark .card-s:hover { box-shadow: 0 12px 40px rgba(255,159,10,.08), 0 4px 16px rgba(0,0,0,.3); }
+
+    /* Shimmer on S cards */
+    .card-s::before {
+      content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.02) 45%, rgba(255,255,255,.04) 50%, rgba(255,255,255,.02) 55%, transparent 60%);
+      transform: translateX(-100%); transition: transform .6s ease;
+    }
+    .card-s:hover::before { transform: translateX(100%); }
+
+    .card-image {
+      position: relative; overflow: hidden;
+    }
+    .card-image-s { height: 220px; }
+    .card-image-a { height: 160px; }
+    .card-image-b { height: 130px; }
+    .card-image-gradient {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, var(--card) 0%, transparent 60%);
+    }
+    .card-image-initial {
+      position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%);
+      font-family: 'Instrument Serif', serif; font-size: 5rem; line-height: 1;
+      color: rgba(255,255,255,.12); pointer-events: none;
+    }
+    .card-rank {
+      position: absolute; top: 10px; left: 10px; z-index: 4;
+      display: flex; align-items: center; gap: 4px;
+      padding: 3px 8px; border-radius: var(--r-xs);
+      font-size: 10px; font-weight: 700; backdrop-filter: blur(8px);
+      border: 1px solid;
+    }
+    .rank-1 { background: rgba(255,159,10,.2); border-color: rgba(255,159,10,.3); color: #ff9f0a; }
+    .rank-2 { background: rgba(168,168,173,.2); border-color: rgba(168,168,173,.3); color: #a8a8ad; }
+    .rank-3 { background: rgba(162,132,94,.2); border-color: rgba(162,132,94,.3); color: #a2845e; }
+    .card-tier-badge {
+      position: absolute; top: 10px; right: 10px; z-index: 4;
+      padding: 2px 7px; border-radius: var(--r-xs);
+      font-size: 11px; font-weight: 700; border: 1px solid;
+    }
+    .badge-s { background: rgba(255,159,10,.2); border-color: rgba(255,159,10,.3); color: #ff9f0a; }
+    .badge-a { background: rgba(74,120,201,.2); border-color: rgba(74,120,201,.3); color: var(--primary); }
+    .badge-b { background: rgba(90,200,250,.2); border-color: rgba(90,200,250,.3); color: #5ac8fa; }
+    .badge-c { background: rgba(99,99,102,.2); border-color: rgba(99,99,102,.3); color: #8e8e93; }
+
+    .card-body { padding: 16px; position: relative; z-index: 2; }
+    .card-body-s { padding: 18px; }
+    .card-name { font-size: 15px; font-weight: 600; line-height: 1.3; }
+    .card-name-s { font-size: 16px; font-weight: 700; }
+    .card-id { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-2); margin-top: 2px; }
+
+    /* Win rate bar */
+    .wr-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+    .wr-track {
+      flex: 1; height: 6px; border-radius: 99px;
+      background: var(--overlay-strong); overflow: hidden;
+    }
+    .wr-fill {
+      height: 100%; border-radius: 99px;
+      width: 0; transition: width 1s ease-out .3s;
+    }
+    .visible .wr-fill { width: var(--wr); }
+    .wr-fill-s { background: var(--tier-s); }
+    .wr-fill-a { background: var(--primary); }
+    .wr-fill-b { background: var(--tier-b); }
+    .wr-value {
+      font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      font-weight: 600; min-width: 42px; text-align: right;
+    }
+
+    /* Stat boxes (S tier) */
+    .card-stat-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 6px; margin-top: 14px;
+    }
+    .card-stat {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 8px 4px; border-radius: var(--r-sm); background: var(--overlay);
+    }
+    .card-stat-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; font-weight: 600;
+    }
+    .card-stat-value.gold { color: var(--warning); }
+    .card-stat-label { font-size: 10px; color: var(--text-2); margin-top: 1px; }
+
+    /* Inline stats (A tier) */
+    .card-inline-stats {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; color: var(--text-2); margin-top: 6px;
+    }
+    .card-inline-stats strong {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600; color: var(--text);
+    }
+    .dot { color: var(--text-3); }
+
+    /* ═══ A TIER ═══ */
+    .a-container {
+      border-radius: calc(var(--r) + 2px);
+      background: var(--overlay);
+      border: 1px solid rgba(255,255,255,.04);
+      padding: 24px;
+    }
+    :root:not(.dark) .a-container { border-color: rgba(0,0,0,.04); }
+    .a-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; margin-bottom: 20px;
+    }
+    .a-header-left { display: flex; align-items: center; gap: 10px; }
+    .a-header-left h2 { font-size: 15px; font-weight: 600; }
+    .a-header-left .count { font-size: 11px; color: var(--text-2); font-family: 'JetBrains Mono', monospace; }
+    .a-inline-stats { font-size: 11px; color: var(--text-2); }
+    .a-inline-stats strong {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600; color: var(--text);
+    }
+    .a-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+
+    /* ═══ B TIER — DIVIDER ═══ */
+    .tier-divider {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+    }
+    .tier-divider h2 { font-size: 14px; font-weight: 600; white-space: nowrap; }
+    .tier-divider .count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--text-2); white-space: nowrap;
+    }
+    .divider-line { flex: 1; height: 1px; background: var(--border); }
+    .tier-divider-muted h2 { font-weight: 500; color: var(--text-2); }
+    .tier-divider-muted .divider-line { opacity: .5; }
+
+    .b-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .card-b .card-body { padding: 12px 14px; }
+    .card-b .card-name { font-size: 14px; }
+
+    /* ═══ C TIER — LIST VIEW ═══ */
+    .c-list { display: flex; flex-direction: column; gap: 2px; }
+    .c-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 10px 14px; border-radius: var(--r-sm);
+      transition: background .2s; cursor: default;
+    }
+    .c-row:hover { background: var(--overlay); }
+    .c-row-avatar {
+      width: 36px; height: 36px; border-radius: var(--r-xs);
+      flex-shrink: 0; display: grid; place-items: center;
+      font-family: 'Instrument Serif', serif; font-size: 18px;
+      color: rgba(255,255,255,.5);
+    }
+    .c-row-info { flex: 1; min-width: 0; }
+    .c-row-name { font-size: 13px; font-weight: 600; }
+    .c-row-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--text-2);
+    }
+    .c-row-wr {
+      display: flex; align-items: center; gap: 10px; width: 160px; flex-shrink: 0;
+    }
+    .c-wr-track {
+      flex: 1; height: 4px; border-radius: 99px;
+      background: var(--overlay-strong); overflow: hidden;
+    }
+    .c-wr-fill {
+      height: 100%; border-radius: 99px; background: var(--tier-c);
+      width: 0; transition: width .8s ease-out .2s;
+    }
+    .visible .c-wr-fill { width: var(--wr); }
+    .c-wr-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; font-weight: 500; color: var(--text-2); min-width: 38px; text-align: right;
+    }
+    .c-row-meta {
+      font-size: 11px; color: var(--text-3);
+      font-family: 'JetBrains Mono', monospace;
+      flex-shrink: 0; min-width: 64px; text-align: right;
+    }
+
+    /* ═══ U TIER — COLLAPSIBLE ═══ */
+    .u-toggle {
+      display: flex; align-items: center; gap: 12px;
+      width: 100%; padding: 0; border: none; background: none;
+      color: var(--text-2); cursor: pointer; font: inherit;
+    }
+    .u-toggle:hover { color: var(--text); }
+    .u-line { flex: 1; height: 1px; background: var(--border); opacity: .5; }
+    .u-label {
+      font-size: 12px; font-weight: 500; letter-spacing: .05em;
+      text-transform: uppercase; white-space: nowrap;
+    }
+    .u-count { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-3); }
+    .u-chevron {
+      transition: transform .3s; font-size: 14px;
+    }
+    .u-chevron.open { transform: rotate(180deg); }
+    .u-content {
+      display: grid; grid-template-columns: repeat(6, 1fr);
+      gap: 10px; padding-top: 24px;
+      max-height: 0; overflow: hidden; opacity: 0;
+      transition: max-height .4s cubic-bezier(.16,1,.3,1), opacity .3s, padding .3s;
+    }
+    .u-content.open { max-height: 1000px; opacity: 1; }
+    .card-u { border-color: rgba(255,255,255,.05); opacity: .7; }
+    .card-u:hover { opacity: 1; }
+    :root:not(.dark) .card-u { border-color: rgba(0,0,0,.05); }
+    .card-image-u { height: 90px; }
+    .card-body-u { padding: 10px 12px; }
+    .card-body-u .card-name { font-size: 12px; font-weight: 500; }
+    .card-body-u .card-id { font-size: 10px; }
+    .card-body-u .u-entries { font-size: 11px; color: var(--text-2); margin-top: 4px; }
+    .card-body-u .u-entries strong {
+      font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--text);
+    }
+
+    /* ═══ ANIMATIONS ═══ */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); filter: blur(4px); }
+      to { opacity: 1; transform: none; filter: none; }
+    }
+
+    /* Card stagger within visible sections */
+    .visible .card, .visible .c-row {
+      animation: fadeInUp .5s cubic-bezier(.16,1,.3,1) both;
+    }
+    .visible .card:nth-child(1), .visible .c-row:nth-child(1) { animation-delay: .05s; }
+    .visible .card:nth-child(2), .visible .c-row:nth-child(2) { animation-delay: .1s; }
+    .visible .card:nth-child(3), .visible .c-row:nth-child(3) { animation-delay: .15s; }
+    .visible .card:nth-child(4), .visible .c-row:nth-child(4) { animation-delay: .2s; }
+    .visible .card:nth-child(5), .visible .c-row:nth-child(5) { animation-delay: .25s; }
+    .visible .card:nth-child(6), .visible .c-row:nth-child(6) { animation-delay: .3s; }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width: 1024px) {
+      .s-grid { grid-template-columns: repeat(2, 1fr); }
+      .a-grid { grid-template-columns: repeat(3, 1fr); }
+      .b-grid { grid-template-columns: repeat(3, 1fr); }
+      .u-content { grid-template-columns: repeat(4, 1fr); }
+      .stat-chips { display: none; }
+    }
+    @media (max-width: 768px) {
+      .page { padding: 20px 16px 60px; }
+      .page-title { font-size: 24px; }
+      .s-container { padding: 16px; }
+      .a-container { padding: 16px; }
+      .s-grid { grid-template-columns: 1fr; }
+      .a-grid { grid-template-columns: repeat(2, 1fr); }
+      .b-grid { grid-template-columns: repeat(2, 1fr); }
+      .u-content { grid-template-columns: repeat(3, 1fr); }
+      .tier-letter { font-size: 32px; }
+      .c-row-wr { width: 120px; }
+      .c-row-meta { display: none; }
+      .a-inline-stats { display: none; }
+    }
+    @media (max-width: 480px) {
+      .a-grid { grid-template-columns: repeat(2, 1fr); }
+      .u-content { grid-template-columns: repeat(2, 1fr); }
+      .tier-pills { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Tier List</h1>
+      <p class="page-subtitle">24 leaders ranked by composite score <span class="format-badge">&mdash; EB-03 Format</span></p>
+    </div>
+    <div class="header-controls">
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+      <div class="format-select">
+        <select><option>EB-03 (Current)</option><option>OP-14</option><option>EB-02</option><option>All Time</option></select>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══ NAV ═══ -->
+  <div class="tier-nav-row">
+    <nav class="tier-pills">
+      <a href="#tier-S" class="tier-pill"><span class="tier-pill-dot" style="background:var(--tier-s)"></span>S<span class="tier-pill-count">3</span></a>
+      <a href="#tier-A" class="tier-pill"><span class="tier-pill-dot" style="background:var(--tier-a)"></span>A<span class="tier-pill-count">5</span></a>
+      <a href="#tier-B" class="tier-pill"><span class="tier-pill-dot" style="background:var(--tier-b)"></span>B<span class="tier-pill-count">4</span></a>
+      <a href="#tier-C" class="tier-pill"><span class="tier-pill-dot" style="background:var(--tier-c)"></span>C<span class="tier-pill-count">6</span></a>
+      <a href="#tier-U" class="tier-pill"><span class="tier-pill-dot" style="background:var(--tier-u)"></span>U<span class="tier-pill-count">15</span></a>
+    </nav>
+    <button class="method-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      Methodology
+    </button>
+  </div>
+
+  <!-- ═══ S TIER ═══ -->
+  <section class="tier-section" id="tier-S">
+    <div class="s-container">
+      <div class="s-accent"></div>
+      <div class="s-glow"></div>
+      <div class="s-header">
+        <div class="s-header-left">
+          <span class="tier-letter tier-letter-s serif">S</span>
+          <div class="tier-info">
+            <h2>S Tier</h2>
+            <p>3 leaders</p>
+          </div>
+        </div>
+        <div class="stat-chips">
+          <div class="stat-chip"><span class="stat-chip-label">Avg WR</span><span class="stat-chip-value mono">58.7%</span></div>
+          <div class="stat-chip"><span class="stat-chip-label">Top 4</span><span class="stat-chip-value mono">38.9%</span></div>
+          <div class="stat-chip"><span class="stat-chip-label">Entries</span><span class="stat-chip-value mono">45</span></div>
+        </div>
+      </div>
+      <div class="s-grid">
+        <!-- Enel -->
+        <div class="card card-s">
+          <div class="card-image card-image-s" style="background:linear-gradient(135deg,#1a0a3e,#1565c0 50%,#64b5f6)">
+            <div class="card-rank rank-1">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6.5 1-4.75 4.5L18 20l-6-3.5L6 20l1.25-6.5L2.5 9l6.5-1z"/></svg>
+              #1
+            </div>
+            <div class="card-tier-badge badge-s">S</div>
+            <div class="card-image-gradient"></div>
+            <span class="card-image-initial">E</span>
+          </div>
+          <div class="card-body card-body-s">
+            <h3 class="card-name card-name-s">Enel</h3>
+            <p class="card-id mono">OP05-098</p>
+            <div class="wr-row">
+              <div class="wr-track"><div class="wr-fill wr-fill-s" style="--wr:62.1%"></div></div>
+              <span class="wr-value mono">62.1%</span>
+            </div>
+            <div class="card-stat-grid">
+              <div class="card-stat"><span class="card-stat-value mono">45.2%</span><span class="card-stat-label">Top 4</span></div>
+              <div class="card-stat"><span class="card-stat-value mono">12</span><span class="card-stat-label">Entries</span></div>
+              <div class="card-stat"><span class="card-stat-value gold mono">3</span><span class="card-stat-label">Wins</span></div>
+            </div>
+          </div>
+        </div>
+        <!-- Sakazuki -->
+        <div class="card card-s">
+          <div class="card-image card-image-s" style="background:linear-gradient(135deg,#4a0000,#d50000 50%,#ff6d00)">
+            <div class="card-rank rank-2">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6.5 1-4.75 4.5L18 20l-6-3.5L6 20l1.25-6.5L2.5 9l6.5-1z"/></svg>
+              #2
+            </div>
+            <div class="card-tier-badge badge-s">S</div>
+            <div class="card-image-gradient"></div>
+            <span class="card-image-initial">S</span>
+          </div>
+          <div class="card-body card-body-s">
+            <h3 class="card-name card-name-s">Sakazuki</h3>
+            <p class="card-id mono">OP05-041</p>
+            <div class="wr-row">
+              <div class="wr-track"><div class="wr-fill wr-fill-s" style="--wr:58.7%"></div></div>
+              <span class="wr-value mono">58.7%</span>
+            </div>
+            <div class="card-stat-grid">
+              <div class="card-stat"><span class="card-stat-value mono">38.1%</span><span class="card-stat-label">Top 4</span></div>
+              <div class="card-stat"><span class="card-stat-value mono">18</span><span class="card-stat-label">Entries</span></div>
+              <div class="card-stat"><span class="card-stat-value gold mono">2</span><span class="card-stat-label">Wins</span></div>
+            </div>
+          </div>
+        </div>
+        <!-- Gecko Moria -->
+        <div class="card card-s">
+          <div class="card-image card-image-s" style="background:linear-gradient(135deg,#1a0033,#4a148c 50%,#ce93d8)">
+            <div class="card-rank rank-3">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6.5 1-4.75 4.5L18 20l-6-3.5L6 20l1.25-6.5L2.5 9l6.5-1z"/></svg>
+              #3
+            </div>
+            <div class="card-tier-badge badge-s">S</div>
+            <div class="card-image-gradient"></div>
+            <span class="card-image-initial">G</span>
+          </div>
+          <div class="card-body card-body-s">
+            <h3 class="card-name card-name-s">Gecko Moria</h3>
+            <p class="card-id mono">OP06-080</p>
+            <div class="wr-row">
+              <div class="wr-track"><div class="wr-fill wr-fill-s" style="--wr:55.3%"></div></div>
+              <span class="wr-value mono">55.3%</span>
+            </div>
+            <div class="card-stat-grid">
+              <div class="card-stat"><span class="card-stat-value mono">33.5%</span><span class="card-stat-label">Top 4</span></div>
+              <div class="card-stat"><span class="card-stat-value mono">15</span><span class="card-stat-label">Entries</span></div>
+              <div class="card-stat"><span class="card-stat-value gold mono">1</span><span class="card-stat-label">Wins</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ A TIER ═══ -->
+  <section class="tier-section" id="tier-A">
+    <div class="a-container">
+      <div class="a-header">
+        <div class="a-header-left">
+          <span class="tier-letter tier-letter-a serif" style="font-size:32px">A</span>
+          <h2>A Tier</h2>
+          <span class="count">5</span>
+        </div>
+        <div class="a-inline-stats">Avg WR <strong class="mono">52.1%</strong> &middot; <strong class="mono">56</strong> entries</div>
+      </div>
+      <div class="a-grid">
+        <div class="card">
+          <div class="card-image card-image-a" style="background:linear-gradient(135deg,#006064,#ff8f00)">
+            <div class="card-tier-badge badge-a">A</div>
+            <div class="card-image-gradient"></div>
+            <span class="card-image-initial">N</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-name">Nami</h3>
+            <p class="card-id mono">ST07-010</p>
+            <div class="wr-row"><div class="wr-track"><div class="wr-fill wr-fill-a" style="--wr:54.2%"></div></div><span class="wr-value mono">54.2%</span></div>
+            <div class="card-inline-stats"><strong>14</strong> entries <span class="dot">&middot;</span> <strong>1</strong> win</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-image card-image-a" style="background:linear-gradient(135deg,#0d1b2a,#b8860b)">
+            <div class="card-tier-badge badge-a">A</div>
+            <div class="card-image-gradient"></div>
+            <span class="card-image-initial">I</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-name">Imu</h3>
+            <p class="card-id mono">EB01-049</p>
+            <div class="wr-row"><div class="wr-track"><div class="wr-fill wr-fill-a" style="--wr:53.1%"></div></div><span class="wr-value mono">53.1%</span></div>
+            <div class="card-inline-stats"><strong>12</strong> entries <span class="dot">&middot;</span> <strong>1</strong> win</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-image card-image-a" style="background:linear-gradient(135deg,#fff8e1,#c62828)">
+            <div class="card-tier-badge badge-a">A</div>
+            <div class="card-image-gradient"></div>
+            <span class="card-image-initial">R</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-name">Rosinante</h3>
+            <p class="card-id mono">OP06-069</p>
+            <div class="wr-row"><div class="wr-track"><div class="wr-fill wr-fill-a" style="--wr:52.0%"></div></div><span class="wr-value mono">52.0%</span></div>
+            <div class="card-inline-stats"><strong>10</strong> entries</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-image card-image-a" style="background:linear-gradient(135deg,#1a1a2e,#c9a227)">
+            <div class="card-tier-badge badge-a">A</div>
+            <div class="card-image-gradient"></div>
+            <span class="card-image-initial">L</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-name">Rob Lucci</h3>
+            <p class="card-id mono">OP05-093</p>
+            <div class="wr-row"><div class="wr-track"><div class="wr-fill wr-fill-a" style="--wr:51.3%"></div></div><span class="wr-value mono">51.3%</span></div>
+            <div class="card-inline-stats"><strong>11</strong> entries</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-image card-image-a" style="background:linear-gradient(135deg,#3e0000,#e91e63)">
+            <div class="card-tier-badge badge-a">A</div>
+            <div class="card-image-gradient"></div>
+            <span class="card-image-initial">K</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-name">Katakuri</h3>
+            <p class="card-id mono">OP03-099</p>
+            <div class="wr-row"><div class="wr-track"><div class="wr-fill wr-fill-a" style="--wr:50.4%"></div></div><span class="wr-value mono">50.4%</span></div>
+            <div class="card-inline-stats"><strong>9</strong> entries</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ B TIER ═══ -->
+  <section class="tier-section" id="tier-B">
+    <div class="tier-divider">
+      <span class="tier-letter tier-letter-b serif" style="font-size:28px">B</span>
+      <h2>B Tier</h2>
+      <span class="count">4</span>
+      <div class="divider-line"></div>
+    </div>
+    <div class="b-grid">
+      <div class="card card-b">
+        <div class="card-image card-image-b" style="background:linear-gradient(135deg,#1a0033,#e91e63 80%)">
+          <div class="card-tier-badge badge-b">B</div><div class="card-image-gradient"></div><span class="card-image-initial">D</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Doflamingo</h3><p class="card-id mono">OP04-031</p>
+          <div class="wr-row"><div class="wr-track"><div class="wr-fill wr-fill-b" style="--wr:49.8%"></div></div><span class="wr-value mono">49.8%</span></div>
+        </div>
+      </div>
+      <div class="card card-b">
+        <div class="card-image card-image-b" style="background:linear-gradient(135deg,#1a237e,#7c4dff 80%)">
+          <div class="card-tier-badge badge-b">B</div><div class="card-image-gradient"></div><span class="card-image-initial">K</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Kaido</h3><p class="card-id mono">OP04-058</p>
+          <div class="wr-row"><div class="wr-track"><div class="wr-fill wr-fill-b" style="--wr:48.5%"></div></div><span class="wr-value mono">48.5%</span></div>
+        </div>
+      </div>
+      <div class="card card-b">
+        <div class="card-image card-image-b" style="background:linear-gradient(135deg,#880e4f,#f48fb1 80%)">
+          <div class="card-tier-badge badge-b">B</div><div class="card-image-gradient"></div><span class="card-image-initial">B</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Big Mom</h3><p class="card-id mono">OP03-078</p>
+          <div class="wr-row"><div class="wr-track"><div class="wr-fill wr-fill-b" style="--wr:47.9%"></div></div><span class="wr-value mono">47.9%</span></div>
+        </div>
+      </div>
+      <div class="card card-b">
+        <div class="card-image card-image-b" style="background:linear-gradient(135deg,#1b5e20,#a5d6a7 80%)">
+          <div class="card-tier-badge badge-b">B</div><div class="card-image-gradient"></div><span class="card-image-initial">C</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Crocodile</h3><p class="card-id mono">OP04-058</p>
+          <div class="wr-row"><div class="wr-track"><div class="wr-fill wr-fill-b" style="--wr:47.1%"></div></div><span class="wr-value mono">47.1%</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ C TIER — LIST VIEW ═══ -->
+  <section class="tier-section" id="tier-C">
+    <div class="tier-divider tier-divider-muted">
+      <span class="tier-letter tier-letter-c serif" style="font-size:24px">C</span>
+      <h2>C Tier</h2>
+      <span class="count">6</span>
+      <div class="divider-line"></div>
+    </div>
+    <div class="c-list">
+      <div class="c-row"><div class="c-row-avatar" style="background:linear-gradient(135deg,#37474f,#78909c)">S</div><div class="c-row-info"><span class="c-row-name">Smoker</span><span class="c-row-id">OP05-052</span></div><div class="c-row-wr"><div class="c-wr-track"><div class="c-wr-fill" style="--wr:46.8%"></div></div><span class="c-wr-value mono">46.8%</span></div><span class="c-row-meta">7 entries</span></div>
+      <div class="c-row"><div class="c-row-avatar" style="background:linear-gradient(135deg,#4e342e,#8d6e63)">J</div><div class="c-row-info"><span class="c-row-name">Jinbe</span><span class="c-row-id">OP06-035</span></div><div class="c-row-wr"><div class="c-wr-track"><div class="c-wr-fill" style="--wr:45.5%"></div></div><span class="c-wr-value mono">45.5%</span></div><span class="c-row-meta">9 entries</span></div>
+      <div class="c-row"><div class="c-row-avatar" style="background:linear-gradient(135deg,#827717,#c0ca33)">Z</div><div class="c-row-info"><span class="c-row-name">Zoro</span><span class="c-row-id">ST01-013</span></div><div class="c-row-wr"><div class="c-wr-track"><div class="c-wr-fill" style="--wr:44.7%"></div></div><span class="c-wr-value mono">44.7%</span></div><span class="c-row-meta">8 entries</span></div>
+      <div class="c-row"><div class="c-row-avatar" style="background:linear-gradient(135deg,#bf360c,#ff6e40)">A</div><div class="c-row-info"><span class="c-row-name">Ace</span><span class="c-row-id">OP02-001</span></div><div class="c-row-wr"><div class="c-wr-track"><div class="c-wr-fill" style="--wr:44.1%"></div></div><span class="c-wr-value mono">44.1%</span></div><span class="c-row-meta">6 entries</span></div>
+      <div class="c-row"><div class="c-row-avatar" style="background:linear-gradient(135deg,#1a237e,#5c6bc0)">L</div><div class="c-row-info"><span class="c-row-name">Law</span><span class="c-row-id">OP05-069</span></div><div class="c-row-wr"><div class="c-wr-track"><div class="c-wr-fill" style="--wr:43.2%"></div></div><span class="c-wr-value mono">43.2%</span></div><span class="c-row-meta">5 entries</span></div>
+      <div class="c-row"><div class="c-row-avatar" style="background:linear-gradient(135deg,#311b92,#b388ff)">F</div><div class="c-row-info"><span class="c-row-name">Fujitora</span><span class="c-row-id">OP06-051</span></div><div class="c-row-wr"><div class="c-wr-track"><div class="c-wr-fill" style="--wr:42.5%"></div></div><span class="c-wr-value mono">42.5%</span></div><span class="c-row-meta">5 entries</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ U TIER ═══ -->
+  <section class="tier-section" id="tier-U">
+    <button class="u-toggle" onclick="toggleUnranked()">
+      <div class="u-line"></div>
+      <span class="u-label">Unranked</span>
+      <span class="u-count mono">15</span>
+      <span class="u-chevron" id="u-chev">&#9662;</span>
+      <div class="u-line"></div>
+    </button>
+    <div class="u-content" id="u-content">
+      <div class="card card-u"><div class="card-image card-image-u" style="background:linear-gradient(135deg,#424242,#757575)"><div class="card-image-gradient"></div></div><div class="card-body card-body-u"><div class="card-name">Whitebeard</div><div class="card-id mono">OP02-004</div><div class="u-entries"><strong>3</strong> entries</div></div></div>
+      <div class="card card-u"><div class="card-image card-image-u" style="background:linear-gradient(135deg,#455a64,#90a4ae)"><div class="card-image-gradient"></div></div><div class="card-body card-body-u"><div class="card-name">Perona</div><div class="card-id mono">OP06-021</div><div class="u-entries"><strong>2</strong> entries</div></div></div>
+      <div class="card card-u"><div class="card-image card-image-u" style="background:linear-gradient(135deg,#3e2723,#795548)"><div class="card-image-gradient"></div></div><div class="card-body card-body-u"><div class="card-name">Boa Hancock</div><div class="card-id mono">OP01-078</div><div class="u-entries"><strong>4</strong> entries</div></div></div>
+      <div class="card card-u"><div class="card-image card-image-u" style="background:linear-gradient(135deg,#546e7a,#b0bec5)"><div class="card-image-gradient"></div></div><div class="card-body card-body-u"><div class="card-name">Kizaru</div><div class="card-id mono">OP05-051</div><div class="u-entries"><strong>2</strong> entries</div></div></div>
+      <div class="card card-u"><div class="card-image card-image-u" style="background:linear-gradient(135deg,#4a148c,#9c27b0)"><div class="card-image-gradient"></div></div><div class="card-body card-body-u"><div class="card-name">Magellan</div><div class="card-id mono">OP02-049</div><div class="u-entries"><strong>1</strong> entry</div></div></div>
+      <div class="card card-u"><div class="card-image card-image-u" style="background:linear-gradient(135deg,#616161,#9e9e9e)"><div class="card-image-gradient"></div></div><div class="card-body card-body-u"><div class="card-name">Sabo</div><div class="card-id mono">OP04-083</div><div class="u-entries"><strong>3</strong> entries</div></div></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // Theme toggle
+  function toggleTheme() {
+    document.documentElement.classList.toggle('dark');
+  }
+
+  // U-tier toggle
+  function toggleUnranked() {
+    const content = document.getElementById('u-content');
+    const chev = document.getElementById('u-chev');
+    content.classList.toggle('open');
+    chev.classList.toggle('open');
+  }
+
+  // Scroll-triggered visibility
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05, rootMargin: '-40px' });
+  document.querySelectorAll('.tier-section').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

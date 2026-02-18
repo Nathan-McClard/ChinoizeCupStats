@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tier List — ChinoizeStats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   CSS CUSTOM PROPERTIES
+   ═══════════════════════════════════════════ */
+:root {
+  --bg: #fafafa;
+  --bg-elevated: #ffffff;
+  --bg-hover: #f4f4f5;
+  --text: #18181b;
+  --text-secondary: #3f3f46;
+  --text-muted: #71717a;
+  --text-faint: #a1a1aa;
+  --border: rgba(0,0,0,0.06);
+  --border-strong: rgba(0,0,0,0.10);
+  --primary: #4a78c9;
+  --primary-bg: rgba(74,120,201,0.08);
+  --primary-bg-hover: rgba(74,120,201,0.14);
+  --tier-s: #f59e0b;
+  --tier-a: #4a78c9;
+  --tier-b: #06b6d4;
+  --tier-c: #6b7280;
+  --tier-u: #a1a1aa;
+  --tier-s-bg: rgba(245,158,11,0.06);
+  --tier-a-bg: rgba(74,120,201,0.06);
+  --tier-b-bg: rgba(6,182,212,0.06);
+  --tier-c-bg: rgba(107,114,128,0.04);
+  --tier-u-bg: rgba(161,161,170,0.04);
+  --bar-track: rgba(0,0,0,0.04);
+  --bar-track-inner: rgba(0,0,0,0.06);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-xs: 6px;
+  --success: #22c55e;
+  --success-muted: rgba(34,197,94,0.12);
+}
+
+.dark {
+  --bg: #0f0f11;
+  --bg-elevated: #18181b;
+  --bg-hover: #1f1f23;
+  --text: #f4f4f5;
+  --text-secondary: #d4d4d8;
+  --text-muted: #71717a;
+  --text-faint: #52525b;
+  --border: rgba(255,255,255,0.06);
+  --border-strong: rgba(255,255,255,0.10);
+  --primary: #4a78c9;
+  --primary-bg: rgba(74,120,201,0.10);
+  --primary-bg-hover: rgba(74,120,201,0.18);
+  --tier-s-bg: rgba(245,158,11,0.08);
+  --tier-a-bg: rgba(74,120,201,0.08);
+  --tier-b-bg: rgba(6,182,212,0.06);
+  --tier-c-bg: rgba(107,114,128,0.05);
+  --tier-u-bg: rgba(161,161,170,0.05);
+  --bar-track: rgba(255,255,255,0.04);
+  --bar-track-inner: rgba(255,255,255,0.06);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+  --success: #4ade80;
+  --success-muted: rgba(74,222,128,0.10);
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  transition: background 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════ */
+.page-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px;
+  padding-bottom: 120px;
+}
+
+/* ═══════════════════════════════════════════
+   TOP BAR
+   ═══════════════════════════════════════════ */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.top-bar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.top-bar-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, var(--primary), #6d9be8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+.top-bar-name {
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.3px;
+}
+
+.top-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+.dark .theme-toggle .icon-sun { display: block; }
+.dark .theme-toggle .icon-moon { display: none; }
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+
+/* ═══════════════════════════════════════════
+   PAGE HEADER
+   ═══════════════════════════════════════════ */
+.page-header {
+  padding-top: 32px;
+  padding-bottom: 8px;
+}
+
+.page-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.page-title-group {
+  flex: 1;
+}
+
+.page-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.page-title {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  font-size: 16px;
+  color: var(--text-muted);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.page-subtitle strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Format Selector */
+.format-selector {
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+
+.format-select {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 32px 8px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-elevated);
+  color: var(--text);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  transition: all 0.15s ease;
+}
+
+.format-select:hover {
+  border-color: var(--primary);
+}
+
+.format-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-bg);
+}
+
+/* ═══════════════════════════════════════════
+   TIER NAV PILLS
+   ═══════════════════════════════════════════ */
+.tier-nav {
+  display: flex;
+  gap: 6px;
+  padding: 20px 0 32px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tier-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.tier-pill:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+  background: var(--bg-hover);
+}
+
+.tier-pill .pill-letter {
+  font-weight: 700;
+}
+
+.tier-pill .pill-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-faint);
+}
+
+.tier-pill[data-tier="s"] .pill-letter { color: var(--tier-s); }
+.tier-pill[data-tier="a"] .pill-letter { color: var(--tier-a); }
+.tier-pill[data-tier="b"] .pill-letter { color: var(--tier-b); }
+.tier-pill[data-tier="c"] .pill-letter { color: var(--tier-c); }
+.tier-pill[data-tier="u"] .pill-letter { color: var(--tier-u); }
+
+/* ═══════════════════════════════════════════
+   TIER SECTIONS
+   ═══════════════════════════════════════════ */
+.tier-section {
+  margin-bottom: 48px;
+}
+
+/* Tier Divider */
+.tier-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  position: relative;
+}
+
+.tier-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.tier-divider-label {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.tier-divider-letter {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.tier-divider-name {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.tier-divider-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
+[data-tier="s"] .tier-divider-letter { color: var(--tier-s); }
+[data-tier="a"] .tier-divider-letter { color: var(--tier-a); }
+[data-tier="b"] .tier-divider-letter { color: var(--tier-b); }
+[data-tier="c"] .tier-divider-letter { color: var(--tier-c); }
+[data-tier="u"] .tier-divider-letter { color: var(--tier-u); }
+
+/* ═══════════════════════════════════════════
+   LEADER ROWS — S TIER (Large)
+   ═══════════════════════════════════════════ */
+.leader-row {
+  position: relative;
+  display: grid;
+  align-items: center;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  overflow: hidden;
+  /* scroll animation */
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.leader-row.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.leader-row:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.leader-row.visible:hover {
+  transform: translateY(-1px);
+}
+
+/* Tier accent — left border */
+.leader-row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 3px 0 0 3px;
+}
+
+[data-tier="s"] .leader-row::before { background: var(--tier-s); }
+[data-tier="a"] .leader-row::before { background: var(--tier-a); }
+[data-tier="b"] .leader-row::before { background: var(--tier-b); }
+[data-tier="c"] .leader-row::before { background: var(--tier-c); }
+[data-tier="u"] .leader-row::before { background: var(--tier-u); }
+
+/* ── S Tier Rows ── */
+.leader-row--s {
+  grid-template-columns: 72px 88px 1fr auto;
+  min-height: 136px;
+  padding: 20px 24px 20px 4px;
+  gap: 0;
+}
+
+.rank-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rank-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text-faint);
+  transition: color 0.2s ease;
+}
+
+.leader-row:hover .rank-number {
+  color: var(--text-muted);
+}
+
+.leader-row--s .rank-number {
+  font-size: 52px;
+  letter-spacing: -3px;
+}
+
+/* Card image placeholder */
+.card-image-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-image {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  position: relative;
+  background: var(--bar-track);
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.leader-row--s .card-image {
+  width: 76px;
+  height: 106px;
+}
+
+/* Info cell */
+.info-cell {
+  padding-left: 20px;
+  min-width: 0;
+}
+
+.leader-name {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.leader-row--s .leader-name {
+  font-size: 22px;
+  margin-bottom: 2px;
+}
+
+.leader-deck-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-faint);
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.leader-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 5px;
+}
+
+[data-tier="s"] .tier-badge {
+  background: var(--tier-s-bg);
+  color: var(--tier-s);
+}
+[data-tier="a"] .tier-badge {
+  background: var(--tier-a-bg);
+  color: var(--tier-a);
+}
+[data-tier="b"] .tier-badge {
+  background: var(--tier-b-bg);
+  color: var(--tier-b);
+}
+
+.stat-chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.stat-chip strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.stat-dot {
+  color: var(--text-faint);
+  margin: 0 2px;
+}
+
+/* Stats cell — right side */
+.stats-cell {
+  text-align: right;
+  padding-left: 24px;
+  min-width: 200px;
+}
+
+.wr-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.wr-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text);
+}
+
+.leader-row--s .wr-value {
+  font-size: 32px;
+  letter-spacing: -1.5px;
+}
+
+.wr-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Win rate bar */
+.wr-bar-container {
+  margin-bottom: 10px;
+}
+
+.wr-bar-track {
+  width: 100%;
+  height: 6px;
+  background: var(--bar-track);
+  border-radius: 100px;
+  overflow: hidden;
+  position: relative;
+}
+
+.leader-row--s .wr-bar-track {
+  height: 8px;
+}
+
+.wr-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+[data-tier="s"] .wr-bar-fill { background: var(--tier-s); }
+[data-tier="a"] .wr-bar-fill { background: var(--tier-a); }
+[data-tier="b"] .wr-bar-fill { background: var(--tier-b); }
+[data-tier="c"] .wr-bar-fill { background: var(--tier-c); }
+[data-tier="u"] .wr-bar-fill { background: var(--tier-u); }
+
+/* Confidence interval marker on bar */
+.wr-bar-ci {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  border-radius: 2px;
+  opacity: 0.25;
+}
+
+[data-tier="s"] .wr-bar-ci { background: var(--tier-s); }
+[data-tier="a"] .wr-bar-ci { background: var(--tier-a); }
+[data-tier="b"] .wr-bar-ci { background: var(--tier-b); }
+
+.stats-row-sub {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.stat-mini {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.stat-mini-value {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Score indicator */
+.score-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bar-track);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+.score-label {
+  font-weight: 500;
+  color: var(--text-faint);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Trophy icon for winners */
+.wins-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--tier-s);
+  background: var(--tier-s-bg);
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+
+.wins-badge svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ── A Tier Rows ── */
+.leader-row--a {
+  grid-template-columns: 56px 64px 1fr auto;
+  min-height: 88px;
+  padding: 14px 20px 14px 4px;
+}
+
+.leader-row--a .rank-number {
+  font-size: 36px;
+  letter-spacing: -2px;
+}
+
+.leader-row--a .card-image {
+  width: 52px;
+  height: 72px;
+}
+
+.leader-row--a .info-cell {
+  padding-left: 16px;
+}
+
+.leader-row--a .leader-name {
+  font-size: 17px;
+  margin-bottom: 1px;
+}
+
+.leader-row--a .leader-deck-id {
+  margin-bottom: 6px;
+}
+
+.leader-row--a .wr-value {
+  font-size: 24px;
+  letter-spacing: -1px;
+}
+
+.leader-row--a .stats-cell {
+  min-width: 170px;
+  padding-left: 16px;
+}
+
+.leader-row--a .wr-bar-track {
+  height: 5px;
+}
+
+/* ── B Tier Rows ── */
+.leader-row--b {
+  grid-template-columns: 48px 1fr auto;
+  min-height: 60px;
+  padding: 10px 18px 10px 4px;
+}
+
+.leader-row--b .rank-number {
+  font-size: 24px;
+  letter-spacing: -1px;
+}
+
+.leader-row--b .info-cell {
+  padding-left: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.leader-row--b .leader-name {
+  font-size: 15px;
+  margin-bottom: 0;
+}
+
+.leader-row--b .leader-deck-id {
+  margin-bottom: 0;
+  display: none;
+}
+
+.leader-row--b .leader-meta {
+  display: none;
+}
+
+.leader-row--b .info-inline-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.leader-row--b .wr-value {
+  font-size: 18px;
+  letter-spacing: -0.5px;
+}
+
+.leader-row--b .stats-cell {
+  min-width: 180px;
+  padding-left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.leader-row--b .wr-display {
+  margin-bottom: 0;
+  min-width: 55px;
+}
+
+.leader-row--b .wr-bar-container {
+  flex: 1;
+  margin-bottom: 0;
+  min-width: 80px;
+}
+
+.leader-row--b .wr-bar-track {
+  height: 4px;
+}
+
+.leader-row--b .stats-row-sub {
+  display: none;
+}
+
+.b-stat-entries {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+/* ── C Tier Rows ── */
+.leader-row--c {
+  grid-template-columns: 40px 1fr auto auto auto;
+  min-height: 44px;
+  padding: 6px 16px 6px 4px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 4px;
+  gap: 0;
+}
+
+.leader-row--c .rank-number {
+  font-size: 16px;
+  letter-spacing: -0.5px;
+  color: var(--text-faint);
+}
+
+.leader-row--c .info-cell {
+  padding-left: 10px;
+}
+
+.leader-row--c .leader-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.c-wr {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 50px;
+  text-align: right;
+  padding: 0 12px;
+}
+
+.c-entries {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-faint);
+  min-width: 35px;
+  text-align: right;
+  padding-right: 12px;
+}
+
+.c-score {
+  min-width: 55px;
+  text-align: right;
+}
+
+.c-score .score-display {
+  font-size: 11px;
+  padding: 2px 8px;
+}
+
+/* Micro bar for C tier */
+.c-micro-bar {
+  width: 40px;
+  height: 3px;
+  background: var(--bar-track);
+  border-radius: 100px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+.c-micro-bar-fill {
+  height: 100%;
+  background: var(--tier-c);
+  border-radius: 100px;
+}
+
+/* ═══════════════════════════════════════════
+   U TIER COLLAPSIBLE
+   ═══════════════════════════════════════════ */
+.u-tier-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 18px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.u-tier-toggle:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-hover);
+}
+
+.u-tier-toggle-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.u-tier-toggle-letter {
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--tier-u);
+  letter-spacing: 1px;
+}
+
+.u-tier-toggle-text {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.u-tier-toggle-chevron {
+  width: 18px;
+  height: 18px;
+  color: var(--text-faint);
+  transition: transform 0.25s ease;
+}
+
+.u-tier-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.u-tier-content.expanded {
+  max-height: 600px;
+}
+
+.u-tier-toggle.expanded .u-tier-toggle-chevron {
+  transform: rotate(180deg);
+}
+
+.u-tier-list {
+  padding: 8px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 16px;
+}
+
+.u-tier-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: var(--radius-xs);
+  transition: background 0.15s ease;
+}
+
+.u-tier-item:hover {
+  background: var(--bg-hover);
+}
+
+.u-rank {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-faint);
+  font-weight: 500;
+  min-width: 24px;
+}
+
+.u-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.u-wr {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-faint);
+  margin-left: auto;
+}
+
+/* ═══════════════════════════════════════════
+   METHODOLOGY SECTION
+   ═══════════════════════════════════════════ */
+.methodology-section {
+  margin-top: 64px;
+  border-top: 1px solid var(--border);
+  padding-top: 32px;
+}
+
+.methodology-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 8px 0;
+  transition: color 0.2s ease;
+}
+
+.methodology-toggle:hover {
+  color: var(--text);
+}
+
+.methodology-toggle svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.25s ease;
+}
+
+.methodology-toggle.expanded svg {
+  transform: rotate(180deg);
+}
+
+.methodology-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.methodology-content.expanded {
+  max-height: 800px;
+}
+
+.methodology-inner {
+  padding: 20px 0;
+  max-width: 640px;
+}
+
+.methodology-inner p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.methodology-inner strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.methodology-inner code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  background: var(--bar-track);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--text-secondary);
+}
+
+.methodology-formula {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  margin: 16px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+/* ═══════════════════════════════════════════
+   SPARKLINE DOTS (trend indicator)
+   ═══════════════════════════════════════════ */
+.sparkline {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.spark-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-faint);
+  transition: background 0.2s ease;
+}
+
+.spark-dot--up { background: var(--success); }
+.spark-dot--down { background: #ef4444; }
+.spark-dot--flat { background: var(--text-faint); }
+.spark-dot--bright { background: var(--success); width: 5px; height: 5px; }
+
+/* Trend arrow */
+.trend-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.trend-up {
+  color: var(--success);
+  background: var(--success-muted);
+}
+
+.trend-down {
+  color: #ef4444;
+  background: rgba(239,68,68,0.10);
+}
+
+.trend-flat {
+  color: var(--text-faint);
+  background: var(--bar-track);
+}
+
+.trend-indicator svg {
+  width: 10px;
+  height: 10px;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .page-container { padding: 0 16px; padding-bottom: 80px; }
+
+  .page-header-top {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .page-title { font-size: 28px; }
+  .page-subtitle { font-size: 14px; }
+
+  .tier-nav { gap: 4px; }
+  .tier-pill { padding: 6px 10px; font-size: 12px; }
+
+  /* S tier mobile */
+  .leader-row--s {
+    grid-template-columns: 52px 64px 1fr;
+    grid-template-rows: auto auto;
+    min-height: auto;
+    padding: 14px 16px 14px 4px;
+  }
+
+  .leader-row--s .stats-cell {
+    grid-column: 1 / -1;
+    text-align: left;
+    padding-left: 52px;
+    padding-top: 8px;
+    min-width: 0;
+  }
+
+  .leader-row--s .wr-display {
+    justify-content: flex-start;
+  }
+
+  .leader-row--s .stats-row-sub {
+    justify-content: flex-start;
+  }
+
+  .leader-row--s .rank-number { font-size: 36px; }
+  .leader-row--s .card-image { width: 56px; height: 78px; }
+  .leader-row--s .leader-name { font-size: 18px; }
+  .leader-row--s .wr-value { font-size: 24px; }
+
+  /* A tier mobile */
+  .leader-row--a {
+    grid-template-columns: 44px 48px 1fr;
+    grid-template-rows: auto auto;
+    min-height: auto;
+    padding: 12px 14px 12px 4px;
+  }
+
+  .leader-row--a .stats-cell {
+    grid-column: 1 / -1;
+    text-align: left;
+    padding-left: 44px;
+    padding-top: 6px;
+    min-width: 0;
+  }
+
+  .leader-row--a .wr-display {
+    justify-content: flex-start;
+  }
+
+  .leader-row--a .rank-number { font-size: 28px; }
+  .leader-row--a .card-image { width: 40px; height: 56px; }
+  .leader-row--a .leader-name { font-size: 15px; }
+  .leader-row--a .wr-value { font-size: 20px; }
+
+  /* B tier mobile */
+  .leader-row--b {
+    grid-template-columns: 40px 1fr;
+    grid-template-rows: auto auto;
+    padding: 10px 14px 10px 4px;
+  }
+
+  .leader-row--b .stats-cell {
+    grid-column: 1 / -1;
+    padding-left: 40px;
+    padding-top: 6px;
+    min-width: 0;
+  }
+
+  .leader-row--b .wr-value { font-size: 16px; }
+
+  /* C tier mobile */
+  .leader-row--c {
+    grid-template-columns: 36px 1fr auto auto;
+  }
+
+  .c-entries { display: none; }
+
+  /* U tier mobile */
+  .u-tier-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .leader-row--s .stats-cell { padding-left: 14px; }
+  .leader-row--a .stats-cell { padding-left: 14px; }
+  .leader-row--b .stats-cell { padding-left: 14px; }
+  .leader-row--b .b-stat-entries { display: none; }
+  .stats-row-sub { gap: 10px; }
+  .stat-mini { font-size: 10px; }
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════ */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.leader-row {
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease,
+              box-shadow 0.22s ease;
+}
+
+/* Stagger animation delay via inline style */
+
+/* Bar animation */
+.wr-bar-fill {
+  width: 0 !important;
+}
+
+.leader-row.visible .wr-bar-fill {
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+}
+
+/* ═══════════════════════════════════════════
+   LAST UPDATED FOOTER
+   ═══════════════════════════════════════════ */
+.page-footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+.page-footer a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.page-footer a:hover {
+  text-decoration: underline;
+}
+
+.page-footer-updated {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+
+/* Scroll to top button */
+.scroll-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s ease;
+  box-shadow: var(--shadow-md);
+  z-index: 50;
+}
+
+.scroll-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.scroll-top:hover {
+  color: var(--text);
+  border-color: var(--primary);
+}
+
+.scroll-top svg {
+  width: 18px;
+  height: 18px;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     TOP BAR
+     ══════════════════════════════════════ -->
+<header class="top-bar">
+  <a href="#" class="top-bar-brand">
+    <div class="top-bar-logo">CS</div>
+    <span class="top-bar-name">ChinoizeStats</span>
+  </a>
+  <div class="top-bar-actions">
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="page-container">
+
+  <!-- ══════════════════════════════════════
+       PAGE HEADER
+       ══════════════════════════════════════ -->
+  <section class="page-header">
+    <div class="page-header-top">
+      <div class="page-title-group">
+        <div class="page-eyebrow">Power Rankings</div>
+        <h1 class="page-title">Tier List</h1>
+        <p class="page-subtitle"><strong>24 leaders</strong> ranked by composite score &mdash; format <strong>EB-03</strong></p>
+      </div>
+      <div class="format-selector">
+        <select class="format-select">
+          <option selected>EB-03</option>
+          <option>EB-02</option>
+          <option>EB-01</option>
+          <option>OP-08</option>
+          <option>OP-07</option>
+          <option>OP-06</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tier Nav Pills -->
+    <nav class="tier-nav">
+      <a href="#tier-s" class="tier-pill" data-tier="s">
+        <span class="pill-letter">S</span>
+        <span class="pill-count">3</span>
+      </a>
+      <a href="#tier-a" class="tier-pill" data-tier="a">
+        <span class="pill-letter">A</span>
+        <span class="pill-count">5</span>
+      </a>
+      <a href="#tier-b" class="tier-pill" data-tier="b">
+        <span class="pill-letter">B</span>
+        <span class="pill-count">4</span>
+      </a>
+      <a href="#tier-c" class="tier-pill" data-tier="c">
+        <span class="pill-letter">C</span>
+        <span class="pill-count">6</span>
+      </a>
+      <a href="#tier-u" class="tier-pill" data-tier="u">
+        <span class="pill-letter">U</span>
+        <span class="pill-count">15</span>
+      </a>
+    </nav>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       S TIER
+       ══════════════════════════════════════ -->
+  <section class="tier-section" data-tier="s" id="tier-s">
+    <div class="tier-divider">
+      <div class="tier-divider-label">
+        <span class="tier-divider-letter">S Tier</span>
+        <span class="tier-divider-name">Meta Defining</span>
+        <span class="tier-divider-count">3 leaders</span>
+      </div>
+    </div>
+
+    <!-- #1 Enel -->
+    <div class="leader-row leader-row--s" style="transition-delay: 0.05s">
+      <div class="rank-cell">
+        <span class="rank-number">#1</span>
+      </div>
+      <div class="card-image-cell">
+        <div class="card-image">
+          <img src="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/OP05/OP05-098_EN.webp" alt="Enel" loading="lazy">
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="leader-name">Enel</div>
+        <div class="leader-deck-id">OP05-098</div>
+        <div class="leader-meta">
+          <span class="tier-badge">S Tier</span>
+          <span class="stat-chip"><strong>12</strong> entries</span>
+          <span class="stat-dot">&middot;</span>
+          <span class="wins-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h14l-1.5 5H6.5L5 3zm1.7 6h10.6l-.9 3H7.6l-.9-3zM9 13h6l-1 3.5a2 2 0 01-1.94 1.5h-.12A2 2 0 0110 16.5L9 13zm2 6h2v2h-2v-2z"/></svg>
+            3 wins
+          </span>
+          <span class="trend-indicator trend-up">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+            +2.1
+          </span>
+        </div>
+      </div>
+      <div class="stats-cell">
+        <div class="wr-display">
+          <span class="wr-value">62.1</span>
+          <span class="wr-label">% WR</span>
+        </div>
+        <div class="wr-bar-container">
+          <div class="wr-bar-track">
+            <div class="wr-bar-fill" data-width="82"></div>
+          </div>
+        </div>
+        <div class="stats-row-sub">
+          <span class="stat-mini"><span class="stat-mini-value">45.2%</span> Top 4</span>
+          <span class="score-display"><span class="score-label">SCR</span> 94.2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- #2 Sakazuki -->
+    <div class="leader-row leader-row--s" style="transition-delay: 0.12s">
+      <div class="rank-cell">
+        <span class="rank-number">#2</span>
+      </div>
+      <div class="card-image-cell">
+        <div class="card-image">
+          <img src="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/OP05/OP05-041_EN.webp" alt="Sakazuki" loading="lazy">
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="leader-name">Sakazuki</div>
+        <div class="leader-deck-id">OP05-041</div>
+        <div class="leader-meta">
+          <span class="tier-badge">S Tier</span>
+          <span class="stat-chip"><strong>18</strong> entries</span>
+          <span class="stat-dot">&middot;</span>
+          <span class="wins-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h14l-1.5 5H6.5L5 3zm1.7 6h10.6l-.9 3H7.6l-.9-3zM9 13h6l-1 3.5a2 2 0 01-1.94 1.5h-.12A2 2 0 0110 16.5L9 13zm2 6h2v2h-2v-2z"/></svg>
+            2 wins
+          </span>
+          <span class="trend-indicator trend-flat">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
+            0.0
+          </span>
+        </div>
+      </div>
+      <div class="stats-cell">
+        <div class="wr-display">
+          <span class="wr-value">58.7</span>
+          <span class="wr-label">% WR</span>
+        </div>
+        <div class="wr-bar-container">
+          <div class="wr-bar-track">
+            <div class="wr-bar-fill" data-width="73"></div>
+          </div>
+        </div>
+        <div class="stats-row-sub">
+          <span class="stat-mini"><span class="stat-mini-value">38.1%</span> Top 4</span>
+          <span class="score-display"><span class="score-label">SCR</span> 87.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- #3 Gecko Moria -->
+    <div class="leader-row leader-row--s" style="transition-delay: 0.19s">
+      <div class="rank-cell">
+        <span class="rank-number">#3</span>
+      </div>
+      <div class="card-image-cell">
+        <div class="card-image">
+          <img src="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/OP06/OP06-080_EN.webp" alt="Gecko Moria" loading="lazy">
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="leader-name">Gecko Moria</div>
+        <div class="leader-deck-id">OP06-080</div>
+        <div class="leader-meta">
+          <span class="tier-badge">S Tier</span>
+          <span class="stat-chip"><strong>15</strong> entries</span>
+          <span class="stat-dot">&middot;</span>
+          <span class="wins-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h14l-1.5 5H6.5L5 3zm1.7 6h10.6l-.9 3H7.6l-.9-3zM9 13h6l-1 3.5a2 2 0 01-1.94 1.5h-.12A2 2 0 0110 16.5L9 13zm2 6h2v2h-2v-2z"/></svg>
+            1 win
+          </span>
+          <span class="trend-indicator trend-down">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            -1.3
+          </span>
+        </div>
+      </div>
+      <div class="stats-cell">
+        <div class="wr-display">
+          <span class="wr-value">55.3</span>
+          <span class="wr-label">% WR</span>
+        </div>
+        <div class="wr-bar-container">
+          <div class="wr-bar-track">
+            <div class="wr-bar-fill" data-width="64"></div>
+          </div>
+        </div>
+        <div class="stats-row-sub">
+          <span class="stat-mini"><span class="stat-mini-value">33.5%</span> Top 4</span>
+          <span class="score-display"><span class="score-label">SCR</span> 78.1</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       A TIER
+       ══════════════════════════════════════ -->
+  <section class="tier-section" data-tier="a" id="tier-a">
+    <div class="tier-divider">
+      <div class="tier-divider-label">
+        <span class="tier-divider-letter">A Tier</span>
+        <span class="tier-divider-name">Competitive</span>
+        <span class="tier-divider-count">5 leaders</span>
+      </div>
+    </div>
+
+    <!-- #4 Nami -->
+    <div class="leader-row leader-row--a" style="transition-delay: 0.05s">
+      <div class="rank-cell"><span class="rank-number">#4</span></div>
+      <div class="card-image-cell">
+        <div class="card-image">
+          <img src="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/ST07/ST07-010_EN.webp" alt="Nami" loading="lazy">
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="leader-name">Nami</div>
+        <div class="leader-deck-id">ST07-010</div>
+        <div class="leader-meta">
+          <span class="tier-badge">A Tier</span>
+          <span class="stat-chip"><strong>14</strong> entries</span>
+          <span class="trend-indicator trend-up">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+            +1.4
+          </span>
+        </div>
+      </div>
+      <div class="stats-cell">
+        <div class="wr-display">
+          <span class="wr-value">54.2</span>
+          <span class="wr-label">% WR</span>
+        </div>
+        <div class="wr-bar-container">
+          <div class="wr-bar-track">
+            <div class="wr-bar-fill" data-width="61"></div>
+          </div>
+        </div>
+        <div class="stats-row-sub">
+          <span class="stat-mini"><span class="stat-mini-value">28.3%</span> Top 4</span>
+          <span class="score-display"><span class="score-label">SCR</span> 71.3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- #5 Imu -->
+    <div class="leader-row leader-row--a" style="transition-delay: 0.10s">
+      <div class="rank-cell"><span class="rank-number">#5</span></div>
+      <div class="card-image-cell">
+        <div class="card-image">
+          <img src="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/EB01/EB01-049_EN.webp" alt="Imu" loading="lazy">
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="leader-name">Imu</div>
+        <div class="leader-deck-id">EB01-049</div>
+        <div class="leader-meta">
+          <span class="tier-badge">A Tier</span>
+          <span class="stat-chip"><strong>11</strong> entries</span>
+          <span class="trend-indicator trend-up">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+            +3.2
+          </span>
+        </div>
+      </div>
+      <div class="stats-cell">
+        <div class="wr-display">
+          <span class="wr-value">53.1</span>
+          <span class="wr-label">% WR</span>
+        </div>
+        <div class="wr-bar-container">
+          <div class="wr-bar-track">
+            <div class="wr-bar-fill" data-width="58"></div>
+          </div>
+        </div>
+        <div class="stats-row-sub">
+          <span class="stat-mini"><span class="stat-mini-value">25.7%</span> Top 4</span>
+          <span class="score-display"><span class="score-label">SCR</span> 68.9</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- #6 Rosinante -->
+    <div class="leader-row leader-row--a" style="transition-delay: 0.15s">
+      <div class="rank-cell"><span class="rank-number">#6</span></div>
+      <div class="card-image-cell">
+        <div class="card-image">
+          <img src="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/OP06/OP06-069_EN.webp" alt="Rosinante" loading="lazy">
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="leader-name">Rosinante</div>
+        <div class="leader-deck-id">OP06-069</div>
+        <div class="leader-meta">
+          <span class="tier-badge">A Tier</span>
+          <span class="stat-chip"><strong>10</strong> entries</span>
+          <span class="trend-indicator trend-flat">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
+            0.0
+          </span>
+        </div>
+      </div>
+      <div class="stats-cell">
+        <div class="wr-display">
+          <span class="wr-value">52.4</span>
+          <span class="wr-label">% WR</span>
+        </div>
+        <div class="wr-bar-container">
+          <div class="wr-bar-track">
+            <div class="wr-bar-fill" data-width="56"></div>
+          </div>
+        </div>
+        <div class="stats-row-sub">
+          <span class="stat-mini"><span class="stat-mini-value">22.1%</span> Top 4</span>
+          <span class="score-display"><span class="score-label">SCR</span> 65.2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- #7 Rob Lucci -->
+    <div class="leader-row leader-row--a" style="transition-delay: 0.20s">
+      <div class="rank-cell"><span class="rank-number">#7</span></div>
+      <div class="card-image-cell">
+        <div class="card-image">
+          <img src="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/OP05/OP05-093_EN.webp" alt="Rob Lucci" loading="lazy">
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="leader-name">Rob Lucci</div>
+        <div class="leader-deck-id">OP05-093</div>
+        <div class="leader-meta">
+          <span class="tier-badge">A Tier</span>
+          <span class="stat-chip"><strong>13</strong> entries</span>
+          <span class="trend-indicator trend-down">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            -0.8
+          </span>
+        </div>
+      </div>
+      <div class="stats-cell">
+        <div class="wr-display">
+          <span class="wr-value">51.8</span>
+          <span class="wr-label">% WR</span>
+        </div>
+        <div class="wr-bar-container">
+          <div class="wr-bar-track">
+            <div class="wr-bar-fill" data-width="54"></div>
+          </div>
+        </div>
+        <div class="stats-row-sub">
+          <span class="stat-mini"><span class="stat-mini-value">20.4%</span> Top 4</span>
+          <span class="score-display"><span class="score-label">SCR</span> 62.8</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- #8 Katakuri -->
+    <div class="leader-row leader-row--a" style="transition-delay: 0.25s">
+      <div class="rank-cell"><span class="rank-number">#8</span></div>
+      <div class="card-image-cell">
+        <div class="card-image">
+          <img src="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/OP03/OP03-099_EN.webp" alt="Katakuri" loading="lazy">
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="leader-name">Katakuri</div>
+        <div class="leader-deck-id">OP03-099</div>
+        <div class="leader-meta">
+          <span class="tier-badge">A Tier</span>
+          <span class="stat-chip"><strong>8</strong> entries</span>
+          <span class="trend-indicator trend-down">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            -2.1
+          </span>
+        </div>
+      </div>
+      <div class="stats-cell">
+        <div class="wr-display">
+          <span class="wr-value">50.5</span>
+          <span class="wr-label">% WR</span>
+        </div>
+        <div class="wr-bar-container">
+          <div class="wr-bar-track">
+            <div class="wr-bar-fill" data-width="51"></div>
+          </div>
+        </div>
+        <div class="stats-row-sub">
+          <span class="stat-mini"><span class="stat-mini-value">18.9%</span> Top 4</span>
+          <span class="score-display"><span class="score-label">SCR</span> 59.4</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       B TIER
+       ══════════════════════════════════════ -->
+  <section class="tier-section" data-tier="b" id="tier-b">
+    <div class="tier-divider">
+      <div class="tier-divider-label">
+        <span class="tier-divider-letter">B Tier</span>
+        <span class="tier-divider-name">Viable</span>
+        <span class="tier-divider-count">4 leaders</span>
+      </div>
+    </div>
+
+    <!-- #9 Doflamingo -->
+    <div class="leader-row leader-row--b" style="transition-delay: 0.05s">
+      <div class="rank-cell"><span class="rank-number">#9</span></div>
+      <div class="info-cell">
+        <div class="leader-name">Doflamingo</div>
+      </div>
+      <div class="stats-cell">
+        <div class="wr-display">
+          <span class="wr-value">49.8</span>
+          <span class="wr-label">%</span>
+        </div>
+        <div class="wr-bar-container">
+          <div class="wr-bar-track">
+            <div class="wr-bar-fill" data-width="49"></div>
+          </div>
+        </div>
+        <span class="b-stat-entries">12 entries</span>
+        <span class="score-display"><span class="score-label">SCR</span> 52.1</span>
+      </div>
+    </div>
+
+    <!-- #10 Kaido -->
+    <div class="leader-row leader-row--b" style="transition-delay: 0.10s">
+      <div class="rank-cell"><span class="rank-number">#10</span></div>
+      <div class="info-cell">
+        <div class="leader-name">Kaido</div>
+      </div>
+      <div class="stats-cell">
+        <div class="wr-display">
+          <span class="wr-value">48.5</span>
+          <span class="wr-label">%</span>
+        </div>
+        <div class="wr-bar-container">
+          <div class="wr-bar-track">
+            <div class="wr-bar-fill" data-width="46"></div>
+          </div>
+        </div>
+        <span class="b-stat-entries">9 entries</span>
+        <span class="score-display"><span class="score-label">SCR</span> 48.7</span>
+      </div>
+    </div>
+
+    <!-- #11 Big Mom -->
+    <div class="leader-row leader-row--b" style="transition-delay: 0.15s">
+      <div class="rank-cell"><span class="rank-number">#11</span></div>
+      <div class="info-cell">
+        <div class="leader-name">Big Mom</div>
+      </div>
+      <div class="stats-cell">
+        <div class="wr-display">
+          <span class="wr-value">47.9</span>
+          <span class="wr-label">%</span>
+        </div>
+        <div class="wr-bar-container">
+          <div class="wr-bar-track">
+            <div class="wr-bar-fill" data-width="44"></div>
+          </div>
+        </div>
+        <span class="b-stat-entries">11 entries</span>
+        <span class="score-display"><span class="score-label">SCR</span> 45.3</span>
+      </div>
+    </div>
+
+    <!-- #12 Crocodile -->
+    <div class="leader-row leader-row--b" style="transition-delay: 0.20s">
+      <div class="rank-cell"><span class="rank-number">#12</span></div>
+      <div class="info-cell">
+        <div class="leader-name">Crocodile</div>
+      </div>
+      <div class="stats-cell">
+        <div class="wr-display">
+          <span class="wr-value">47.1</span>
+          <span class="wr-label">%</span>
+        </div>
+        <div class="wr-bar-container">
+          <div class="wr-bar-track">
+            <div class="wr-bar-fill" data-width="42"></div>
+          </div>
+        </div>
+        <span class="b-stat-entries">7 entries</span>
+        <span class="score-display"><span class="score-label">SCR</span> 42.0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       C TIER
+       ══════════════════════════════════════ -->
+  <section class="tier-section" data-tier="c" id="tier-c">
+    <div class="tier-divider">
+      <div class="tier-divider-label">
+        <span class="tier-divider-letter">C Tier</span>
+        <span class="tier-divider-name">Below Average</span>
+        <span class="tier-divider-count">6 leaders</span>
+      </div>
+    </div>
+
+    <!-- #13 Whitebeard -->
+    <div class="leader-row leader-row--c" style="transition-delay: 0.05s">
+      <div class="rank-cell"><span class="rank-number">#13</span></div>
+      <div class="info-cell"><div class="leader-name">Whitebeard</div></div>
+      <div class="c-wr">46.2%<span class="c-micro-bar"><span class="c-micro-bar-fill" style="width:38%"></span></span></div>
+      <div class="c-entries">8 ent.</div>
+      <div class="c-score"><span class="score-display">38.1</span></div>
+    </div>
+
+    <!-- #14 Shanks -->
+    <div class="leader-row leader-row--c" style="transition-delay: 0.08s">
+      <div class="rank-cell"><span class="rank-number">#14</span></div>
+      <div class="info-cell"><div class="leader-name">Shanks</div></div>
+      <div class="c-wr">45.5%<span class="c-micro-bar"><span class="c-micro-bar-fill" style="width:34%"></span></span></div>
+      <div class="c-entries">6 ent.</div>
+      <div class="c-score"><span class="score-display">35.7</span></div>
+    </div>
+
+    <!-- #15 Zoro -->
+    <div class="leader-row leader-row--c" style="transition-delay: 0.11s">
+      <div class="rank-cell"><span class="rank-number">#15</span></div>
+      <div class="info-cell"><div class="leader-name">Zoro</div></div>
+      <div class="c-wr">44.8%<span class="c-micro-bar"><span class="c-micro-bar-fill" style="width:30%"></span></span></div>
+      <div class="c-entries">9 ent.</div>
+      <div class="c-score"><span class="score-display">33.2</span></div>
+    </div>
+
+    <!-- #16 Law -->
+    <div class="leader-row leader-row--c" style="transition-delay: 0.14s">
+      <div class="rank-cell"><span class="rank-number">#16</span></div>
+      <div class="info-cell"><div class="leader-name">Law</div></div>
+      <div class="c-wr">43.9%<span class="c-micro-bar"><span class="c-micro-bar-fill" style="width:26%"></span></span></div>
+      <div class="c-entries">5 ent.</div>
+      <div class="c-score"><span class="score-display">30.8</span></div>
+    </div>
+
+    <!-- #17 Kid -->
+    <div class="leader-row leader-row--c" style="transition-delay: 0.17s">
+      <div class="rank-cell"><span class="rank-number">#17</span></div>
+      <div class="info-cell"><div class="leader-name">Kid</div></div>
+      <div class="c-wr">43.1%<span class="c-micro-bar"><span class="c-micro-bar-fill" style="width:22%"></span></span></div>
+      <div class="c-entries">7 ent.</div>
+      <div class="c-score"><span class="score-display">28.4</span></div>
+    </div>
+
+    <!-- #18 Yamato -->
+    <div class="leader-row leader-row--c" style="transition-delay: 0.20s">
+      <div class="rank-cell"><span class="rank-number">#18</span></div>
+      <div class="info-cell"><div class="leader-name">Yamato</div></div>
+      <div class="c-wr">42.3%<span class="c-micro-bar"><span class="c-micro-bar-fill" style="width:18%"></span></span></div>
+      <div class="c-entries">6 ent.</div>
+      <div class="c-score"><span class="score-display">25.1</span></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       U TIER (Collapsed)
+       ══════════════════════════════════════ -->
+  <section class="tier-section" data-tier="u" id="tier-u">
+    <div class="tier-divider">
+      <div class="tier-divider-label">
+        <span class="tier-divider-letter">U Tier</span>
+        <span class="tier-divider-name">Unranked</span>
+        <span class="tier-divider-count">15 leaders</span>
+      </div>
+    </div>
+
+    <button class="u-tier-toggle" onclick="toggleUTier(this)">
+      <div class="u-tier-toggle-left">
+        <span class="u-tier-toggle-letter">U</span>
+        <span class="u-tier-toggle-text">15 unranked leaders &mdash; insufficient data or below threshold</span>
+      </div>
+      <svg class="u-tier-toggle-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+
+    <div class="u-tier-content" id="u-tier-content">
+      <div class="u-tier-list">
+        <div class="u-tier-item"><span class="u-rank">19</span><span class="u-name">Monkey D. Luffy</span><span class="u-wr">41.2%</span></div>
+        <div class="u-tier-item"><span class="u-rank">20</span><span class="u-name">Boa Hancock</span><span class="u-wr">40.8%</span></div>
+        <div class="u-tier-item"><span class="u-rank">21</span><span class="u-name">Jinbe</span><span class="u-wr">40.1%</span></div>
+        <div class="u-tier-item"><span class="u-rank">22</span><span class="u-name">Smoker</span><span class="u-wr">39.4%</span></div>
+        <div class="u-tier-item"><span class="u-rank">23</span><span class="u-name">Trafalgar Law</span><span class="u-wr">38.7%</span></div>
+        <div class="u-tier-item"><span class="u-rank">24</span><span class="u-name">Sabo</span><span class="u-wr">38.2%</span></div>
+        <div class="u-tier-item"><span class="u-rank">25</span><span class="u-name">Kuzan</span><span class="u-wr">37.5%</span></div>
+        <div class="u-tier-item"><span class="u-rank">26</span><span class="u-name">Ace</span><span class="u-wr">36.9%</span></div>
+        <div class="u-tier-item"><span class="u-rank">27</span><span class="u-name">Kizaru</span><span class="u-wr">36.1%</span></div>
+        <div class="u-tier-item"><span class="u-rank">28</span><span class="u-name">Fujitora</span><span class="u-wr">35.4%</span></div>
+        <div class="u-tier-item"><span class="u-rank">29</span><span class="u-name">Magellan</span><span class="u-wr">34.8%</span></div>
+        <div class="u-tier-item"><span class="u-rank">30</span><span class="u-name">Perona</span><span class="u-wr">33.9%</span></div>
+        <div class="u-tier-item"><span class="u-rank">31</span><span class="u-name">Uta</span><span class="u-wr">33.2%</span></div>
+        <div class="u-tier-item"><span class="u-rank">32</span><span class="u-name">Bonney</span><span class="u-wr">32.1%</span></div>
+        <div class="u-tier-item"><span class="u-rank">33</span><span class="u-name">Kinemon</span><span class="u-wr">31.5%</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       METHODOLOGY
+       ══════════════════════════════════════ -->
+  <section class="methodology-section">
+    <button class="methodology-toggle" onclick="toggleMethodology(this)">
+      Methodology
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="methodology-content" id="methodology-content">
+      <div class="methodology-inner">
+        <p>
+          Leaders are ranked by a <strong>composite score</strong> that weights multiple performance signals
+          to provide a holistic view of competitive viability. The system balances raw win rate against
+          consistency and meta presence.
+        </p>
+        <div class="methodology-formula">
+          Score = (WR &times; 0.35) + (Top4% &times; 0.30) + (Entries_norm &times; 0.20) + (Wins_bonus &times; 0.15)
+        </div>
+        <p>
+          <strong>Win Rate (35%)</strong> measures overall match win percentage across all tracked tournaments
+          in the current format. Only matches with verified results are included.
+        </p>
+        <p>
+          <strong>Top 4 Rate (30%)</strong> measures how often a leader finishes in the top 4 of a tournament
+          relative to its total entries. This rewards consistent deep runs over raw volume.
+        </p>
+        <p>
+          <strong>Entries (20%)</strong> is normalized against the most-played leader in the format. Higher
+          representation increases confidence in the win rate data and provides a meta-share signal.
+        </p>
+        <p>
+          <strong>Tournament Wins (15%)</strong> provides a bonus for first-place finishes. Each win is
+          weighted equally regardless of tournament size. Leaders with <code>&lt; 5 entries</code> in the
+          current format are placed in <strong>U Tier</strong> (Unranked) due to insufficient sample size.
+        </p>
+        <p>
+          Tier boundaries are determined by natural breaks in the score distribution using a
+          modified <strong>Jenks optimization</strong> algorithm, ensuring that leaders within a tier are
+          more similar to each other than to leaders in adjacent tiers.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════ -->
+  <footer class="page-footer">
+    <span>Built by <a href="#">ChinoizeStats</a></span>
+    <span class="page-footer-updated">Updated Feb 17, 2026</span>
+  </footer>
+
+</main>
+
+<!-- Scroll to top -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<script>
+// ═══════════════════════════════════════════
+// THEME TOGGLE
+// ═══════════════════════════════════════════
+function toggleTheme() {
+  document.documentElement.classList.toggle('dark');
+}
+
+// ═══════════════════════════════════════════
+// U TIER TOGGLE
+// ═══════════════════════════════════════════
+function toggleUTier(btn) {
+  const content = document.getElementById('u-tier-content');
+  btn.classList.toggle('expanded');
+  content.classList.toggle('expanded');
+}
+
+// ═══════════════════════════════════════════
+// METHODOLOGY TOGGLE
+// ═══════════════════════════════════════════
+function toggleMethodology(btn) {
+  const content = document.getElementById('methodology-content');
+  btn.classList.toggle('expanded');
+  content.classList.toggle('expanded');
+}
+
+// ═══════════════════════════════════════════
+// SCROLL-TRIGGERED ANIMATIONS
+// ═══════════════════════════════════════════
+function initScrollAnimations() {
+  const rows = document.querySelectorAll('.leader-row');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+
+        // Animate win rate bars
+        const bar = entry.target.querySelector('.wr-bar-fill');
+        if (bar) {
+          const targetWidth = bar.getAttribute('data-width');
+          requestAnimationFrame(() => {
+            bar.style.setProperty('width', targetWidth + '%', 'important');
+          });
+        }
+
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '-40px'
+  });
+
+  rows.forEach(row => observer.observe(row));
+}
+
+// ═══════════════════════════════════════════
+// SCROLL TO TOP BUTTON
+// ═══════════════════════════════════════════
+function initScrollTop() {
+  const btn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 400) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  }, { passive: true });
+}
+
+// ═══════════════════════════════════════════
+// SMOOTH SCROLL FOR TIER NAV
+// ═══════════════════════════════════════════
+function initTierNav() {
+  document.querySelectorAll('.tier-pill').forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(pill.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  initScrollAnimations();
+  initScrollTop();
+  initTierNav();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tier List — ChinoizeStats</title>
+
+<!-- Fonts -->
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f8f8fa;
+  --surface: #ffffff;
+  --elevated: #f0f0f2;
+  --text: #1a1a1e;
+  --text-secondary: #44444c;
+  --muted: #8e8e96;
+  --border: rgba(0,0,0,0.08);
+  --border-strong: rgba(0,0,0,0.12);
+
+  --tier-s: #f59e0b;
+  --tier-s-glow: rgba(245, 158, 11, 0.15);
+  --tier-a: #4a78c9;
+  --tier-a-glow: rgba(74, 120, 201, 0.10);
+  --tier-b: #06b6d4;
+  --tier-b-glow: rgba(6, 182, 212, 0.08);
+  --tier-c: #6b7280;
+  --tier-u: #a1a1aa;
+
+  --primary: #4a78c9;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+
+  --font-heading: 'General Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', monospace;
+
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+  --shadow-card-hover: 0 4px 16px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.04);
+  --shadow-podium: 0 8px 40px rgba(0,0,0,0.06);
+}
+
+.dark {
+  --bg: #111113;
+  --surface: #1a1a1e;
+  --elevated: #222226;
+  --text: #e8e8ec;
+  --text-secondary: #b4b4bc;
+  --muted: #6e6e76;
+  --border: rgba(255,255,255,0.06);
+  --border-strong: rgba(255,255,255,0.10);
+
+  --tier-s-glow: rgba(245, 158, 11, 0.12);
+  --tier-a-glow: rgba(74, 120, 201, 0.08);
+  --tier-b-glow: rgba(6, 182, 212, 0.06);
+
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.15);
+  --shadow-card-hover: 0 4px 16px rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.2);
+  --shadow-podium: 0 8px 40px rgba(0,0,0,0.3);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* ===== REVEAL ANIMATION ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  filter: blur(5px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+.reveal-delay-4 { transition-delay: 0.32s; }
+.reveal-delay-5 { transition-delay: 0.40s; }
+.reveal-delay-6 { transition-delay: 0.48s; }
+
+/* ===== STICKY HEADER ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.4s ease;
+}
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.header-brand {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.header-title {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.format-select {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 7px 32px 7px 12px;
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236e6e76' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  transition: border-color 0.2s, background 0.4s;
+}
+.format-select:hover { border-color: var(--primary); }
+
+/* Theme Toggle */
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  color: var(--muted);
+}
+.theme-toggle:hover {
+  background: var(--surface);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: scale(1.05);
+}
+.theme-toggle svg { width: 16px; height: 16px; }
+.dark .theme-toggle .icon-sun { display: block; }
+.dark .theme-toggle .icon-moon { display: none; }
+html:not(.dark) .theme-toggle .icon-sun { display: none; }
+html:not(.dark) .theme-toggle .icon-moon { display: block; }
+
+/* ===== TIER NAVIGATION PILLS ===== */
+.tier-nav {
+  position: sticky;
+  top: 57px;
+  z-index: 90;
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.4s ease;
+}
+.tier-nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tier-pill {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 5px 16px;
+  border-radius: 100px;
+  border: 1.5px solid var(--border-strong);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+.tier-pill:hover {
+  border-color: var(--tier-color, var(--muted));
+  color: var(--tier-color, var(--text));
+  background: color-mix(in srgb, var(--tier-color, var(--muted)) 8%, transparent);
+}
+.tier-pill[data-tier="s"] { --tier-color: var(--tier-s); }
+.tier-pill[data-tier="a"] { --tier-color: var(--tier-a); }
+.tier-pill[data-tier="b"] { --tier-color: var(--tier-b); }
+.tier-pill[data-tier="c"] { --tier-color: var(--tier-c); }
+.tier-pill[data-tier="u"] { --tier-color: var(--tier-u); }
+.tier-nav-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--muted);
+  margin-right: 4px;
+}
+
+/* ===== MAIN CONTENT ===== */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 120px;
+}
+
+/* ===== S TIER — THE PODIUM ===== */
+.section-s {
+  padding-top: 48px;
+  padding-bottom: 80px;
+}
+.podium-glow {
+  position: relative;
+}
+.podium-glow::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 200px;
+  background: radial-gradient(ellipse at center, var(--tier-s-glow) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.s-tier-header {
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+}
+.s-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.s-tier-letter {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--tier-s);
+  line-height: 1;
+}
+.s-tier-label {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tier-s);
+  opacity: 0.8;
+}
+.s-tier-subtitle {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* Podium Layout */
+.podium {
+  display: grid;
+  grid-template-columns: 1fr 1.8fr 1fr;
+  gap: 20px;
+  align-items: end;
+  position: relative;
+  z-index: 1;
+}
+
+/* Stage floor */
+.podium::after {
+  content: '';
+  position: absolute;
+  bottom: -24px;
+  left: -20px;
+  right: -20px;
+  height: 48px;
+  background: linear-gradient(to bottom,
+    color-mix(in srgb, var(--tier-s) 4%, transparent),
+    transparent
+  );
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Podium Card Base */
+.podium-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+  position: relative;
+}
+.podium-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* #1 — The Champion */
+.podium-champion {
+  grid-column: 2;
+  grid-row: 1;
+}
+.podium-champion .podium-card {
+  box-shadow: var(--shadow-podium);
+  border-color: color-mix(in srgb, var(--tier-s) 25%, var(--border));
+}
+.podium-champion .podium-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--tier-s), transparent);
+  z-index: 2;
+}
+.champion-image {
+  width: 100%;
+  height: 280px;
+  position: relative;
+  overflow: hidden;
+}
+.champion-image .card-gradient {
+  width: 100%;
+  height: 100%;
+}
+.champion-rank-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--tier-s);
+  color: #000;
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+  z-index: 3;
+}
+.champion-wins-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.champion-wins-badge svg { width: 12px; height: 12px; }
+
+.champion-body {
+  padding: 24px 28px 28px;
+}
+.champion-name {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
+}
+.champion-deck-id {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+.champion-wr-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.champion-wr-number {
+  font-family: var(--font-mono);
+  font-size: 52px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.champion-wr-pct {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-left: -4px;
+}
+.champion-wr-label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--muted);
+  margin-left: 4px;
+}
+.champion-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.champion-stat {
+  background: var(--surface);
+  padding: 12px 14px;
+  text-align: center;
+}
+.champion-stat-value {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.champion-stat-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.champion-score-bar {
+  margin-top: 16px;
+  position: relative;
+}
+.champion-score-track {
+  width: 100%;
+  height: 6px;
+  background: var(--elevated);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.champion-score-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--tier-s), #fbbf24);
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 0;
+}
+.champion-score-fill.animate { width: var(--score); }
+.champion-score-label {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+.champion-score-label span {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+.champion-score-label .score-val {
+  color: var(--tier-s);
+  font-weight: 600;
+}
+
+/* #2 and #3 — Runners Up */
+.podium-runner {
+  display: flex;
+  flex-direction: column;
+}
+.podium-runner.runner-left { grid-column: 1; grid-row: 1; }
+.podium-runner.runner-right { grid-column: 3; grid-row: 1; }
+
+.runner-image {
+  width: 100%;
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+}
+.runner-image .card-gradient {
+  width: 100%;
+  height: 100%;
+}
+.runner-rank-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+.runner-left .runner-rank-badge {
+  background: #c0c0c0;
+  color: #333;
+  box-shadow: 0 2px 6px rgba(192, 192, 192, 0.4);
+}
+.runner-right .runner-rank-badge {
+  background: #cd7f32;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(205, 127, 50, 0.4);
+}
+
+.runner-body {
+  padding: 16px 18px 20px;
+}
+.runner-name {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin-bottom: 1px;
+}
+.runner-deck-id {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.runner-wr-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.runner-wr-number {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.runner-wr-pct {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.runner-wr-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: 4px;
+}
+.runner-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.runner-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.runner-stat-row .label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--muted);
+}
+.runner-stat-row .value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* ===== A TIER — THE CONTENDERS ===== */
+.section-a {
+  padding-top: 20px;
+  padding-bottom: 80px;
+  position: relative;
+}
+
+.tier-section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.tier-letter-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.tier-letter-badge.tier-a {
+  background: color-mix(in srgb, var(--tier-a) 12%, transparent);
+  color: var(--tier-a);
+  border: 1px solid color-mix(in srgb, var(--tier-a) 20%, transparent);
+}
+.tier-letter-badge.tier-b {
+  background: color-mix(in srgb, var(--tier-b) 10%, transparent);
+  color: var(--tier-b);
+  border: 1px solid color-mix(in srgb, var(--tier-b) 18%, transparent);
+}
+.tier-letter-badge.tier-c {
+  background: color-mix(in srgb, var(--tier-c) 10%, transparent);
+  color: var(--tier-c);
+  border: 1px solid color-mix(in srgb, var(--tier-c) 18%, transparent);
+}
+.tier-header-text h2 {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.tier-header-text p {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--muted);
+}
+.tier-header-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* A Tier Strip — with rotated label */
+.a-tier-container {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  position: relative;
+}
+.a-tier-rotated-label {
+  width: 40px;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.a-tier-rotated-label span {
+  transform: rotate(-90deg);
+  white-space: nowrap;
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--tier-a);
+  opacity: 0.5;
+}
+.a-tier-strip {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 4px 4px 12px 0;
+  flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+.a-tier-strip::-webkit-scrollbar { height: 4px; }
+.a-tier-strip::-webkit-scrollbar-track { background: transparent; }
+.a-tier-strip::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+
+/* A Tier Card */
+.a-card {
+  min-width: 180px;
+  max-width: 200px;
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  cursor: pointer;
+}
+.a-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-card-hover);
+}
+.a-card-image {
+  width: 100%;
+  height: 120px;
+  position: relative;
+  overflow: hidden;
+}
+.a-card-image .card-gradient {
+  width: 100%;
+  height: 100%;
+}
+.a-card-rank {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.a-card-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.a-card-name {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1px;
+}
+.a-card-deck-id {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+/* SVG Win Rate Ring */
+.wr-ring-container {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  margin-bottom: 10px;
+}
+.wr-ring-container svg {
+  width: 68px;
+  height: 68px;
+  transform: rotate(-90deg);
+}
+.wr-ring-bg {
+  fill: none;
+  stroke: var(--elevated);
+  stroke-width: 4;
+}
+.wr-ring-fill {
+  fill: none;
+  stroke: var(--tier-a);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: var(--dash);
+  stroke-dashoffset: var(--dash);
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wr-ring-fill.animate { stroke-dashoffset: var(--dash-offset); }
+.wr-ring-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.wr-ring-value {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+.wr-ring-label {
+  font-size: 9px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.a-card-meta {
+  display: flex;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+.a-card-meta span { display: flex; align-items: center; gap: 3px; }
+
+/* ===== B TIER — THE PACK ===== */
+.section-b {
+  padding-top: 20px;
+  padding-bottom: 80px;
+}
+
+.b-tier-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.b-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  cursor: pointer;
+}
+.b-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
+}
+.b-card-image {
+  width: 100%;
+  height: 100px;
+  position: relative;
+  overflow: hidden;
+}
+.b-card-image .card-gradient {
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+}
+.b-card-rank {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px);
+  padding: 2px 7px;
+  border-radius: 100px;
+  z-index: 2;
+}
+.b-card-body {
+  padding: 12px 14px 14px;
+}
+.b-card-name {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1px;
+}
+.b-card-deck-id {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.b-card-wr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.b-card-wr-value {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.b-card-entries {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ===== C TIER — THE BENCH ===== */
+.section-c {
+  padding-top: 20px;
+  padding-bottom: 80px;
+}
+.c-tier-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.c-tier-table thead th {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  background: var(--elevated);
+}
+.c-tier-table thead th:last-child,
+.c-tier-table tbody td:last-child {
+  text-align: right;
+}
+.c-tier-table tbody tr {
+  transition: background 0.15s ease;
+}
+.c-tier-table tbody tr:hover {
+  background: color-mix(in srgb, var(--primary) 4%, transparent);
+}
+.c-tier-table tbody tr:not(:last-child) td {
+  border-bottom: 1px solid var(--border);
+}
+.c-tier-table tbody td {
+  padding: 11px 16px;
+  font-size: 13px;
+}
+.c-rank-cell {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  width: 48px;
+}
+.c-name-cell {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text);
+}
+.c-wr-cell {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text);
+}
+.c-entries-cell {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+.c-score-cell {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--tier-c);
+}
+
+/* ===== U TIER — UNRANKED ===== */
+.section-u {
+  padding-top: 20px;
+  padding-bottom: 80px;
+}
+.u-tier-collapse {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.u-tier-toggle {
+  width: 100%;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--muted);
+  transition: background 0.15s, color 0.15s;
+}
+.u-tier-toggle:hover {
+  background: var(--elevated);
+  color: var(--text-secondary);
+}
+.u-tier-toggle-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.u-tier-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--elevated);
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+.u-tier-chevron {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.u-tier-collapse.open .u-tier-chevron {
+  transform: rotate(180deg);
+}
+.u-tier-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.u-tier-collapse.open .u-tier-content {
+  max-height: 400px;
+}
+.u-tier-list {
+  padding: 0 20px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.u-tier-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--muted);
+  transition: border-color 0.2s, color 0.2s;
+  cursor: default;
+}
+.u-tier-chip:hover {
+  border-color: var(--border-strong);
+  color: var(--text-secondary);
+}
+.u-tier-chip .chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tier-u);
+  opacity: 0.5;
+}
+
+/* ===== METHODOLOGY ===== */
+.section-methodology {
+  padding-top: 0;
+  padding-bottom: 40px;
+}
+.methodology-collapse {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.methodology-toggle {
+  width: 100%;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: background 0.15s;
+}
+.methodology-toggle:hover { background: var(--elevated); }
+.methodology-chevron {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.methodology-collapse.open .methodology-chevron {
+  transform: rotate(180deg);
+}
+.methodology-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.methodology-collapse.open .methodology-content {
+  max-height: 600px;
+}
+.methodology-body {
+  padding: 0 20px 20px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.methodology-body p { margin-bottom: 10px; }
+.methodology-body strong { color: var(--text-secondary); font-weight: 600; }
+
+/* ===== CARD IMAGE GRADIENTS ===== */
+.grad-enel {
+  background: linear-gradient(135deg, #1a3a5c 0%, #2d6fb8 40%, #5bb8f5 70%, #e8d364 100%);
+}
+.grad-sakazuki {
+  background: linear-gradient(135deg, #4a1010 0%, #9b2020 35%, #e04040 65%, #f5a040 100%);
+}
+.grad-moria {
+  background: linear-gradient(135deg, #1a0a2e 0%, #3b1a6e 35%, #6b30a8 65%, #a060d8 100%);
+}
+.grad-nami {
+  background: linear-gradient(135deg, #2a4a1a 0%, #5a9030 40%, #90c840 70%, #f0e060 100%);
+}
+.grad-imu {
+  background: linear-gradient(135deg, #0a1a3a 0%, #1a3060 35%, #304888 65%, #6080c0 100%);
+}
+.grad-rosinante {
+  background: linear-gradient(135deg, #1a1a30 0%, #3a3060 35%, #5848a0 65%, #8070d0 100%);
+}
+.grad-lucci {
+  background: linear-gradient(135deg, #2a1a10 0%, #5a3020 35%, #8a4830 65%, #c07040 100%);
+}
+.grad-katakuri {
+  background: linear-gradient(135deg, #3a0a1a 0%, #6a1030 35%, #a01848 65%, #e03070 100%);
+}
+.grad-doflamingo {
+  background: linear-gradient(135deg, #2a1030 0%, #5a2060 35%, #8a3090 65%, #c050b0 100%);
+}
+.grad-kaido {
+  background: linear-gradient(135deg, #1a2030 0%, #2a3858 35%, #3a5080 65%, #5078b0 100%);
+}
+.grad-bigmom {
+  background: linear-gradient(135deg, #3a2010 0%, #704020 35%, #a06030 65%, #d08840 100%);
+}
+.grad-crocodile {
+  background: linear-gradient(135deg, #2a2010 0%, #4a3820 35%, #706040 65%, #a09060 100%);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .header-inner { padding: 12px 16px; }
+  .header-brand { display: none; }
+  main { padding: 0 16px 80px; }
+
+  .tier-nav-inner {
+    padding: 8px 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tier-nav-inner::-webkit-scrollbar { display: none; }
+
+  .podium {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .podium-champion { grid-column: 1; grid-row: 1; }
+  .podium-runner.runner-left { grid-column: 1; grid-row: 2; }
+  .podium-runner.runner-right { grid-column: 1; grid-row: 3; }
+  .podium::after { display: none; }
+
+  .champion-image { height: 220px; }
+  .champion-wr-number { font-size: 44px; }
+
+  .runner-image { height: 140px; }
+
+  .a-tier-rotated-label { display: none; }
+  .a-tier-strip { padding-left: 0; }
+  .a-card { min-width: 160px; }
+
+  .b-tier-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+  .c-tier-table thead th.hide-mobile,
+  .c-tier-table tbody td.hide-mobile { display: none; }
+
+  .section-s, .section-a, .section-b, .section-c, .section-u {
+    padding-bottom: 56px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .podium {
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 14px;
+  }
+  .champion-image { height: 240px; }
+  .champion-wr-number { font-size: 46px; }
+}
+
+/* Podium mobile runners side-by-side */
+@media (max-width: 768px) {
+  .podium {
+    grid-template-columns: 1fr 1fr;
+  }
+  .podium-champion {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .podium-runner.runner-left {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .podium-runner.runner-right {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <span class="header-brand">ChinoizeStats</span>
+      <h1 class="header-title">Tier List</h1>
+    </div>
+    <div class="header-right">
+      <select class="format-select">
+        <option>EB-03 (Current)</option>
+        <option>EB-02</option>
+        <option>EB-01</option>
+        <option>OP-06</option>
+      </select>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== TIER NAV ===== -->
+<nav class="tier-nav">
+  <div class="tier-nav-inner">
+    <span class="tier-nav-label">Jump to:</span>
+    <a href="#tier-s" class="tier-pill" data-tier="s">S Tier</a>
+    <a href="#tier-a" class="tier-pill" data-tier="a">A Tier</a>
+    <a href="#tier-b" class="tier-pill" data-tier="b">B Tier</a>
+    <a href="#tier-c" class="tier-pill" data-tier="c">C Tier</a>
+    <a href="#tier-u" class="tier-pill" data-tier="u">Unranked</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ==================== S TIER — THE PODIUM ==================== -->
+  <section class="section-s" id="tier-s">
+    <div class="podium-glow">
+      <div class="s-tier-header reveal">
+        <div class="s-tier-badge">
+          <span class="s-tier-letter">S</span>
+          <span class="s-tier-label">Tier</span>
+        </div>
+        <p class="s-tier-subtitle">The dominant forces of the current meta</p>
+      </div>
+
+      <div class="podium">
+        <!-- #2 — Runner Left -->
+        <div class="podium-runner runner-left reveal reveal-delay-2">
+          <div class="podium-card">
+            <div class="runner-image">
+              <div class="card-gradient grad-sakazuki"></div>
+              <div class="runner-rank-badge">2</div>
+            </div>
+            <div class="runner-body">
+              <div class="runner-name">Sakazuki</div>
+              <div class="runner-deck-id">OP05-041</div>
+              <div class="runner-wr-row">
+                <span class="runner-wr-number">58.7</span>
+                <span class="runner-wr-pct">%</span>
+                <span class="runner-wr-label">WR</span>
+              </div>
+              <div class="runner-stats">
+                <div class="runner-stat-row">
+                  <span class="label">Top 4 Rate</span>
+                  <span class="value">38.1%</span>
+                </div>
+                <div class="runner-stat-row">
+                  <span class="label">Entries</span>
+                  <span class="value">18</span>
+                </div>
+                <div class="runner-stat-row">
+                  <span class="label">Wins</span>
+                  <span class="value">2</span>
+                </div>
+                <div class="runner-stat-row">
+                  <span class="label">Score</span>
+                  <span class="value" style="color:var(--tier-s)">87.5</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- #1 — Champion -->
+        <div class="podium-champion reveal reveal-delay-1">
+          <div class="podium-card">
+            <div class="champion-image">
+              <div class="card-gradient grad-enel"></div>
+              <div class="champion-rank-badge">1</div>
+              <div class="champion-wins-badge">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                3 Wins
+              </div>
+            </div>
+            <div class="champion-body">
+              <div class="champion-name">Enel</div>
+              <div class="champion-deck-id">OP05-098</div>
+              <div class="champion-wr-row">
+                <span class="champion-wr-number">62.1</span>
+                <span class="champion-wr-pct">%</span>
+                <span class="champion-wr-label">win rate</span>
+              </div>
+              <div class="champion-stats">
+                <div class="champion-stat">
+                  <div class="champion-stat-value">45.2%</div>
+                  <div class="champion-stat-label">Top 4</div>
+                </div>
+                <div class="champion-stat">
+                  <div class="champion-stat-value">12</div>
+                  <div class="champion-stat-label">Entries</div>
+                </div>
+                <div class="champion-stat">
+                  <div class="champion-stat-value">3</div>
+                  <div class="champion-stat-label">Wins</div>
+                </div>
+              </div>
+              <div class="champion-score-bar">
+                <div class="champion-score-track">
+                  <div class="champion-score-fill" style="--score:94.2%"></div>
+                </div>
+                <div class="champion-score-label">
+                  <span>Tier Score</span>
+                  <span class="score-val">94.2</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- #3 — Runner Right -->
+        <div class="podium-runner runner-right reveal reveal-delay-3">
+          <div class="podium-card">
+            <div class="runner-image">
+              <div class="card-gradient grad-moria"></div>
+              <div class="runner-rank-badge">3</div>
+            </div>
+            <div class="runner-body">
+              <div class="runner-name">Gecko Moria</div>
+              <div class="runner-deck-id">OP06-080</div>
+              <div class="runner-wr-row">
+                <span class="runner-wr-number">55.3</span>
+                <span class="runner-wr-pct">%</span>
+                <span class="runner-wr-label">WR</span>
+              </div>
+              <div class="runner-stats">
+                <div class="runner-stat-row">
+                  <span class="label">Top 4 Rate</span>
+                  <span class="value">33.5%</span>
+                </div>
+                <div class="runner-stat-row">
+                  <span class="label">Entries</span>
+                  <span class="value">15</span>
+                </div>
+                <div class="runner-stat-row">
+                  <span class="label">Wins</span>
+                  <span class="value">1</span>
+                </div>
+                <div class="runner-stat-row">
+                  <span class="label">Score</span>
+                  <span class="value" style="color:var(--tier-s)">78.1</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== A TIER — THE CONTENDERS ==================== -->
+  <section class="section-a reveal" id="tier-a">
+    <div class="tier-section-header">
+      <div class="tier-letter-badge tier-a">A</div>
+      <div class="tier-header-text">
+        <h2>The Contenders</h2>
+        <p>Competitive picks with strong tournament results</p>
+      </div>
+      <div class="tier-header-line"></div>
+    </div>
+
+    <div class="a-tier-container">
+      <div class="a-tier-rotated-label">
+        <span>A Tier</span>
+      </div>
+      <div class="a-tier-strip">
+
+        <!-- Nami -->
+        <div class="a-card reveal reveal-delay-1">
+          <div class="a-card-image">
+            <div class="card-gradient grad-nami"></div>
+            <div class="a-card-rank">#4</div>
+          </div>
+          <div class="a-card-body">
+            <div class="a-card-name">Nami</div>
+            <div class="a-card-deck-id">ST07-010</div>
+            <div class="wr-ring-container">
+              <svg viewBox="0 0 68 68">
+                <circle class="wr-ring-bg" cx="34" cy="34" r="28"/>
+                <circle class="wr-ring-fill" cx="34" cy="34" r="28"
+                  style="--dash:175.93;--dash-offset:80.73"/>
+              </svg>
+              <div class="wr-ring-text">
+                <span class="wr-ring-value">54.2%</span>
+                <span class="wr-ring-label">WR</span>
+              </div>
+            </div>
+            <div class="a-card-meta">
+              <span>T4: 28.3%</span>
+              <span>14 ent.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Imu -->
+        <div class="a-card reveal reveal-delay-2">
+          <div class="a-card-image">
+            <div class="card-gradient grad-imu"></div>
+            <div class="a-card-rank">#5</div>
+          </div>
+          <div class="a-card-body">
+            <div class="a-card-name">Imu</div>
+            <div class="a-card-deck-id">EB01-049</div>
+            <div class="wr-ring-container">
+              <svg viewBox="0 0 68 68">
+                <circle class="wr-ring-bg" cx="34" cy="34" r="28"/>
+                <circle class="wr-ring-fill" cx="34" cy="34" r="28"
+                  style="--dash:175.93;--dash-offset:82.66"/>
+              </svg>
+              <div class="wr-ring-text">
+                <span class="wr-ring-value">53.1%</span>
+                <span class="wr-ring-label">WR</span>
+              </div>
+            </div>
+            <div class="a-card-meta">
+              <span>T4: 25.7%</span>
+              <span>11 ent.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rosinante -->
+        <div class="a-card reveal reveal-delay-3">
+          <div class="a-card-image">
+            <div class="card-gradient grad-rosinante"></div>
+            <div class="a-card-rank">#6</div>
+          </div>
+          <div class="a-card-body">
+            <div class="a-card-name">Rosinante</div>
+            <div class="a-card-deck-id">OP06-069</div>
+            <div class="wr-ring-container">
+              <svg viewBox="0 0 68 68">
+                <circle class="wr-ring-bg" cx="34" cy="34" r="28"/>
+                <circle class="wr-ring-fill" cx="34" cy="34" r="28"
+                  style="--dash:175.93;--dash-offset:83.89"/>
+              </svg>
+              <div class="wr-ring-text">
+                <span class="wr-ring-value">52.4%</span>
+                <span class="wr-ring-label">WR</span>
+              </div>
+            </div>
+            <div class="a-card-meta">
+              <span>T4: 22.1%</span>
+              <span>10 ent.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rob Lucci -->
+        <div class="a-card reveal reveal-delay-4">
+          <div class="a-card-image">
+            <div class="card-gradient grad-lucci"></div>
+            <div class="a-card-rank">#7</div>
+          </div>
+          <div class="a-card-body">
+            <div class="a-card-name">Rob Lucci</div>
+            <div class="a-card-deck-id">OP05-093</div>
+            <div class="wr-ring-container">
+              <svg viewBox="0 0 68 68">
+                <circle class="wr-ring-bg" cx="34" cy="34" r="28"/>
+                <circle class="wr-ring-fill" cx="34" cy="34" r="28"
+                  style="--dash:175.93;--dash-offset:84.94"/>
+              </svg>
+              <div class="wr-ring-text">
+                <span class="wr-ring-value">51.8%</span>
+                <span class="wr-ring-label">WR</span>
+              </div>
+            </div>
+            <div class="a-card-meta">
+              <span>T4: 20.4%</span>
+              <span>13 ent.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Katakuri -->
+        <div class="a-card reveal reveal-delay-5">
+          <div class="a-card-image">
+            <div class="card-gradient grad-katakuri"></div>
+            <div class="a-card-rank">#8</div>
+          </div>
+          <div class="a-card-body">
+            <div class="a-card-name">Katakuri</div>
+            <div class="a-card-deck-id">OP03-099</div>
+            <div class="wr-ring-container">
+              <svg viewBox="0 0 68 68">
+                <circle class="wr-ring-bg" cx="34" cy="34" r="28"/>
+                <circle class="wr-ring-fill" cx="34" cy="34" r="28"
+                  style="--dash:175.93;--dash-offset:87.23"/>
+              </svg>
+              <div class="wr-ring-text">
+                <span class="wr-ring-value">50.5%</span>
+                <span class="wr-ring-label">WR</span>
+              </div>
+            </div>
+            <div class="a-card-meta">
+              <span>T4: 18.9%</span>
+              <span>8 ent.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== B TIER — THE PACK ==================== -->
+  <section class="section-b reveal" id="tier-b">
+    <div class="tier-section-header">
+      <div class="tier-letter-badge tier-b">B</div>
+      <div class="tier-header-text">
+        <h2>The Pack</h2>
+        <p>Viable options that see regular play</p>
+      </div>
+      <div class="tier-header-line"></div>
+    </div>
+
+    <div class="b-tier-grid">
+      <div class="b-card reveal reveal-delay-1">
+        <div class="b-card-image">
+          <div class="card-gradient grad-doflamingo"></div>
+          <span class="b-card-rank">#9</span>
+        </div>
+        <div class="b-card-body">
+          <div class="b-card-name">Doflamingo</div>
+          <div class="b-card-deck-id">OP04-019</div>
+          <div class="b-card-wr">
+            <span class="b-card-wr-value">49.8%</span>
+            <span class="b-card-entries">12 ent.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="b-card reveal reveal-delay-2">
+        <div class="b-card-image">
+          <div class="card-gradient grad-kaido"></div>
+          <span class="b-card-rank">#10</span>
+        </div>
+        <div class="b-card-body">
+          <div class="b-card-name">Kaido</div>
+          <div class="b-card-deck-id">OP04-058</div>
+          <div class="b-card-wr">
+            <span class="b-card-wr-value">48.5%</span>
+            <span class="b-card-entries">9 ent.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="b-card reveal reveal-delay-3">
+        <div class="b-card-image">
+          <div class="card-gradient grad-bigmom"></div>
+          <span class="b-card-rank">#11</span>
+        </div>
+        <div class="b-card-body">
+          <div class="b-card-name">Big Mom</div>
+          <div class="b-card-deck-id">OP03-078</div>
+          <div class="b-card-wr">
+            <span class="b-card-wr-value">47.9%</span>
+            <span class="b-card-entries">11 ent.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="b-card reveal reveal-delay-4">
+        <div class="b-card-image">
+          <div class="card-gradient grad-crocodile"></div>
+          <span class="b-card-rank">#12</span>
+        </div>
+        <div class="b-card-body">
+          <div class="b-card-name">Crocodile</div>
+          <div class="b-card-deck-id">OP02-058</div>
+          <div class="b-card-wr">
+            <span class="b-card-wr-value">47.1%</span>
+            <span class="b-card-entries">7 ent.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== C TIER — THE BENCH ==================== -->
+  <section class="section-c reveal" id="tier-c">
+    <div class="tier-section-header">
+      <div class="tier-letter-badge tier-c">C</div>
+      <div class="tier-header-text">
+        <h2>The Bench</h2>
+        <p>Fringe picks with below-average results</p>
+      </div>
+      <div class="tier-header-line"></div>
+    </div>
+
+    <table class="c-tier-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Leader</th>
+          <th>Win Rate</th>
+          <th class="hide-mobile">Entries</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="c-rank-cell">#13</td>
+          <td class="c-name-cell">Whitebeard</td>
+          <td class="c-wr-cell">46.2%</td>
+          <td class="c-entries-cell hide-mobile">8</td>
+          <td class="c-score-cell">38.1</td>
+        </tr>
+        <tr>
+          <td class="c-rank-cell">#14</td>
+          <td class="c-name-cell">Shanks</td>
+          <td class="c-wr-cell">45.5%</td>
+          <td class="c-entries-cell hide-mobile">6</td>
+          <td class="c-score-cell">35.7</td>
+        </tr>
+        <tr>
+          <td class="c-rank-cell">#15</td>
+          <td class="c-name-cell">Zoro</td>
+          <td class="c-wr-cell">44.8%</td>
+          <td class="c-entries-cell hide-mobile">9</td>
+          <td class="c-score-cell">33.2</td>
+        </tr>
+        <tr>
+          <td class="c-rank-cell">#16</td>
+          <td class="c-name-cell">Law</td>
+          <td class="c-wr-cell">43.9%</td>
+          <td class="c-entries-cell hide-mobile">5</td>
+          <td class="c-score-cell">30.8</td>
+        </tr>
+        <tr>
+          <td class="c-rank-cell">#17</td>
+          <td class="c-name-cell">Kid</td>
+          <td class="c-wr-cell">43.1%</td>
+          <td class="c-entries-cell hide-mobile">7</td>
+          <td class="c-score-cell">28.4</td>
+        </tr>
+        <tr>
+          <td class="c-rank-cell">#18</td>
+          <td class="c-name-cell">Yamato</td>
+          <td class="c-wr-cell">42.3%</td>
+          <td class="c-entries-cell hide-mobile">6</td>
+          <td class="c-score-cell">25.1</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ==================== U TIER — UNRANKED ==================== -->
+  <section class="section-u reveal" id="tier-u">
+    <div class="tier-section-header" style="margin-bottom: 16px;">
+      <div class="tier-letter-badge" style="background:color-mix(in srgb, var(--tier-u) 10%, transparent); color:var(--tier-u); border:1px solid color-mix(in srgb, var(--tier-u) 18%, transparent);">U</div>
+      <div class="tier-header-text">
+        <h2>Unranked</h2>
+        <p>Insufficient data or below threshold</p>
+      </div>
+      <div class="tier-header-line"></div>
+    </div>
+
+    <div class="u-tier-collapse" id="u-collapse">
+      <button class="u-tier-toggle" onclick="toggleCollapse('u-collapse')">
+        <div class="u-tier-toggle-left">
+          <span>Show unranked leaders</span>
+          <span class="u-tier-count">15</span>
+        </div>
+        <svg class="u-tier-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="u-tier-content">
+        <div class="u-tier-list">
+          <span class="u-tier-chip"><span class="chip-dot"></span>Smoker</span>
+          <span class="u-tier-chip"><span class="chip-dot"></span>Jinbe</span>
+          <span class="u-tier-chip"><span class="chip-dot"></span>Boa Hancock</span>
+          <span class="u-tier-chip"><span class="chip-dot"></span>Marco</span>
+          <span class="u-tier-chip"><span class="chip-dot"></span>Sabo</span>
+          <span class="u-tier-chip"><span class="chip-dot"></span>Ace</span>
+          <span class="u-tier-chip"><span class="chip-dot"></span>Buggy</span>
+          <span class="u-tier-chip"><span class="chip-dot"></span>Kizaru</span>
+          <span class="u-tier-chip"><span class="chip-dot"></span>Aokiji</span>
+          <span class="u-tier-chip"><span class="chip-dot"></span>Fujitora</span>
+          <span class="u-tier-chip"><span class="chip-dot"></span>Bonney</span>
+          <span class="u-tier-chip"><span class="chip-dot"></span>Hawkins</span>
+          <span class="u-tier-chip"><span class="chip-dot"></span>Apoo</span>
+          <span class="u-tier-chip"><span class="chip-dot"></span>X Drake</span>
+          <span class="u-tier-chip"><span class="chip-dot"></span>Urouge</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== METHODOLOGY ==================== -->
+  <section class="section-methodology reveal">
+    <div class="methodology-collapse" id="methodology-collapse">
+      <button class="methodology-toggle" onclick="toggleCollapse('methodology-collapse')">
+        <span>Methodology</span>
+        <svg class="methodology-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="methodology-content">
+        <div class="methodology-body">
+          <p><strong>Tier Score</strong> is a composite metric that weighs win rate, top 4 conversion rate, and tournament wins, normalized against the field. Leaders need a minimum of 5 entries across tracked tournaments to qualify for ranking.</p>
+          <p><strong>S Tier</strong> (Score 75+): Meta-defining leaders with dominant win rates and consistent top finishes. These are the decks to beat.</p>
+          <p><strong>A Tier</strong> (Score 55-74): Strong competitive choices that regularly place well. Solid picks for any tournament.</p>
+          <p><strong>B Tier</strong> (Score 40-54): Viable but not dominant. Can win in the right hands or meta pockets.</p>
+          <p><strong>C Tier</strong> (Score 20-39): Below average results. Playable but face uphill battles against the meta.</p>
+          <p><strong>Unranked</strong>: Fewer than 5 entries or insufficient data to generate a meaningful ranking.</p>
+          <p>Data sourced from ChinoizeCup tournaments during the <strong>EB-03 format</strong>. Updated after each event.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// ===== THEME TOGGLE =====
+function toggleTheme() {
+  document.documentElement.classList.toggle('dark');
+}
+
+// ===== COLLAPSIBLE SECTIONS =====
+function toggleCollapse(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// ===== SCROLL-TRIGGERED REVEAL =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+
+      // Animate score bar fills
+      entry.target.querySelectorAll('.champion-score-fill').forEach(el => {
+        setTimeout(() => el.classList.add('animate'), 300);
+      });
+
+      // Animate WR rings
+      entry.target.querySelectorAll('.wr-ring-fill').forEach(el => {
+        setTimeout(() => el.classList.add('animate'), 400);
+      });
+    }
+  });
+}, {
+  threshold: 0.1,
+  rootMargin: '-40px'
+});
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ===== SMOOTH SCROLL FOR NAV PILLS =====
+document.querySelectorAll('.tier-pill').forEach(pill => {
+  pill.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(pill.getAttribute('href'));
+    if (target) {
+      const headerOffset = 110;
+      const elementPosition = target.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
+  });
+});
+
+// ===== ACTIVE PILL HIGHLIGHT ON SCROLL =====
+const sections = document.querySelectorAll('section[id]');
+const pills = document.querySelectorAll('.tier-pill');
+
+function updateActivePill() {
+  let current = '';
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= 140) {
+      current = section.getAttribute('id');
+    }
+  });
+  pills.forEach(pill => {
+    const href = pill.getAttribute('href').substring(1);
+    if (href === current) {
+      pill.style.borderColor = `var(--tier-color)`;
+      pill.style.color = `var(--tier-color)`;
+      pill.style.background = `color-mix(in srgb, var(--tier-color) 10%, transparent)`;
+    } else {
+      pill.style.borderColor = '';
+      pill.style.color = '';
+      pill.style.background = '';
+    }
+  });
+}
+
+window.addEventListener('scroll', updateActivePill, { passive: true });
+updateActivePill();
+</script>
+
+</body>
+</html>

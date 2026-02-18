@@ -5,5 +5,8 @@
 [build.environment]
   NODE_VERSION = "20"
 
+[build.processing]
+  ignore_exposed_secrets = ["LIMITLESS_API_BASE_URL"]
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"

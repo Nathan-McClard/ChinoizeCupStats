@@ -17,7 +17,7 @@ export function Header({ title, description }: HeaderProps) {
 
         <div className="flex items-center gap-3 lg:hidden">
           <Logo size={32} className="rounded-lg" />
-          <span className="font-bold text-foreground">ChinoizeStats</span>
+          <span className="font-bold text-foreground">ChinoizeCupStats</span>
         </div>
 
         {title && (

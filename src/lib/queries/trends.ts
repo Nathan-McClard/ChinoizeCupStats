@@ -1,9 +1,13 @@
 import { db } from "@/lib/db";
 import { standings, tournaments } from "@/lib/db/schema";
-import { eq, sql, desc } from "drizzle-orm";
+import { eq, sql, and, inArray } from "drizzle-orm";
 
-export async function getMetaTrends() {
-  // Get meta share per tournament date
+export async function getMetaTrends(tournamentIds?: string[]) {
+  const conditions = [sql`${standings.deckId} is not null`];
+  if (tournamentIds && tournamentIds.length > 0) {
+    conditions.push(inArray(standings.tournamentId, tournamentIds));
+  }
+
   const trends = await db
     .select({
       tournamentId: standings.tournamentId,
@@ -15,7 +19,7 @@ export async function getMetaTrends() {
     })
     .from(standings)
     .innerJoin(tournaments, eq(standings.tournamentId, tournaments.id))
-    .where(sql`${standings.deckId} is not null`)
+    .where(and(...conditions))
     .groupBy(standings.tournamentId, tournaments.date, standings.deckId, tournaments.playerCount)
     .orderBy(tournaments.date);
 
@@ -39,7 +43,12 @@ export async function getMetaTrends() {
   return Object.values(byDate).sort((a, b) => a.date.localeCompare(b.date));
 }
 
-export async function getWinRateTrends() {
+export async function getWinRateTrends(tournamentIds?: string[]) {
+  const conditions = [sql`${standings.deckId} is not null`];
+  if (tournamentIds && tournamentIds.length > 0) {
+    conditions.push(inArray(standings.tournamentId, tournamentIds));
+  }
+
   const trends = await db
     .select({
       date: tournaments.date,
@@ -51,7 +60,7 @@ export async function getWinRateTrends() {
     })
     .from(standings)
     .innerJoin(tournaments, eq(standings.tournamentId, tournaments.id))
-    .where(sql`${standings.deckId} is not null`)
+    .where(and(...conditions))
     .groupBy(tournaments.date, standings.deckId)
     .orderBy(tournaments.date);
 
@@ -67,46 +76,4 @@ export async function getWinRateTrends() {
       winRate: total > 0 ? wins / total : 0,
     };
   });
-}
-
-export async function getDiversityIndex() {
-  // Shannon diversity index per tournament
-  const tournamentData = await db
-    .select({
-      tournamentId: standings.tournamentId,
-      date: tournaments.date,
-      deckId: standings.deckId,
-      count: sql<number>`count(*)`,
-    })
-    .from(standings)
-    .innerJoin(tournaments, eq(standings.tournamentId, tournaments.id))
-    .where(sql`${standings.deckId} is not null`)
-    .groupBy(standings.tournamentId, tournaments.date, standings.deckId)
-    .orderBy(tournaments.date);
-
-  // Group by tournament
-  const byTournament: Record<string, { date: string; counts: number[] }> = {};
-  for (const row of tournamentData) {
-    if (!byTournament[row.tournamentId]) {
-      byTournament[row.tournamentId] = { date: row.date, counts: [] };
-    }
-    byTournament[row.tournamentId].counts.push(Number(row.count));
-  }
-
-  return Object.entries(byTournament)
-    .map(([id, data]) => {
-      const total = data.counts.reduce((sum, c) => sum + c, 0);
-      const shannon = -data.counts.reduce((sum, c) => {
-        const p = c / total;
-        return sum + (p > 0 ? p * Math.log(p) : 0);
-      }, 0);
-
-      return {
-        tournamentId: id,
-        date: data.date,
-        diversityIndex: shannon,
-        uniqueLeaders: data.counts.length,
-      };
-    })
-    .sort((a, b) => a.date.localeCompare(b.date));
 }

@@ -7,9 +7,7 @@ import {
   LayoutDashboard,
   Trophy,
   Crown,
-  Layers,
   FileText,
-  TrendingUp,
   Users,
   Menu,
   X,
@@ -25,8 +23,6 @@ const navItems = [
   { href: "/players", label: "Players", icon: Users },
   { href: "/tier-list", label: "Tier List", icon: Crown },
   { href: "/decklists", label: "Decklists", icon: FileText },
-  { href: "/cards", label: "Card Analytics", icon: Layers },
-  { href: "/trends", label: "Meta Trends", icon: TrendingUp },
 ];
 
 function NavContent({ onNavigate }: { onNavigate?: () => void }) {
@@ -38,8 +34,12 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
         <Link href="/" className="flex items-center gap-3" onClick={onNavigate}>
           <Logo size={40} className="rounded-xl" />
           <div>
-            <h1 className="text-lg font-bold text-foreground tracking-tight">ChinoizeStats</h1>
-            <p className="text-xs text-muted-foreground">OP TCG Meta Snapshot</p>
+            <h1 className="text-lg font-bold text-foreground tracking-tight">
+              ChinoizeCupStats
+            </h1>
+            <p className="text-xs text-muted-foreground">
+              OP TCG Meta Snapshot
+            </p>
           </div>
         </Link>
       </div>
@@ -61,7 +61,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200",
                 isActive
                   ? "bg-black/[0.06] dark:bg-white/[0.08] text-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-black/[0.03] dark:hover:bg-white/[0.04]"
+                  : "text-muted-foreground hover:text-foreground hover:bg-black/[0.03] dark:hover:bg-white/[0.04]",
               )}
             >
               <Icon className={cn("w-4 h-4", isActive && "text-primary")} />

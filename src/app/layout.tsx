@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ChinoizeStats - One Piece TCG Meta Snapshot",
+  title: "ChinoizeCupStats - One Piece TCG Meta Snapshot",
   description:
     "Tournament analytics and meta snapshot for ChinoizeCup One Piece TCG tournaments",
 };
@@ -30,7 +30,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${jetbrainsMono.variable} flex min-h-screen`}>
+      <body
+        className={`${inter.variable} ${jetbrainsMono.variable} flex min-h-screen`}
+      >
         <ThemeProvider>
           <Sidebar />
           <div className="flex-1 flex flex-col min-h-screen">

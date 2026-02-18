@@ -130,7 +130,7 @@ export function HeroStats({
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[-0.03em] text-foreground leading-tight">
-            ChinoizeStats
+            Chinoize Cup
           </h1>
 
           <p className="mt-2 sm:mt-3 text-sm text-muted-foreground/70 max-w-sm leading-relaxed">
@@ -183,7 +183,8 @@ export function HeroStats({
             <div
               className="absolute inset-x-0 top-0 h-px"
               style={{
-                background: "linear-gradient(to right, transparent, var(--accent-line), transparent)",
+                background:
+                  "linear-gradient(to right, transparent, var(--accent-line), transparent)",
               }}
             />
             <div className="flex items-center gap-1.5">

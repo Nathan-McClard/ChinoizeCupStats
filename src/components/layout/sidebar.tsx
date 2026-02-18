@@ -15,6 +15,7 @@ import {
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useState } from "react";
 
 const navItems = [
@@ -30,7 +31,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="p-6 border-b border-border">
+      <div className="p-6 border-b border-border flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3" onClick={onNavigate}>
           <div>
             <h1 className="text-lg font-bold text-foreground tracking-tight">
@@ -41,6 +42,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
             </p>
           </div>
         </Link>
+        {/* <ThemeToggle /> */}
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-0.5">

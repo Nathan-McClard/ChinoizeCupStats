@@ -1,0 +1,30 @@
+name: Sync Tournament Data
+
+on:
+  schedule:
+    # Runs at 6:00 PM EST (11:00 PM UTC) on Mon/Tue/Wed
+    - cron: "0 23 * * 1,2,3"
+  workflow_dispatch: # Allow manual trigger from GitHub Actions tab
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Sync latest tournaments
+        run: npm run sync
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          LIMITLESS_API_BASE_URL: ${{ secrets.LIMITLESS_API_BASE_URL }}
+
+      - name: Trigger Netlify redeploy
+        run: curl -X POST "${{ secrets.NETLIFY_BUILD_HOOK }}" -d '{}'
+        if: success()

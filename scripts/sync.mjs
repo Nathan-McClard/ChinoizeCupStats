@@ -243,15 +243,25 @@ async function syncSingleTournament(db, tournamentId) {
   if (cardRows.length > 0) await batchInsert(db, decklistCards, cardRows);
 
   // Insert pairings (handle bye rounds with empty strings)
-  const pairingRows = pairingsData.map((p) => ({
-    tournamentId,
-    round: p.round,
-    phase: String(p.phase || 1),
-    table: p.table,
-    player1: p.player1 || "",
-    player2: p.player2 || "",
-    winner: p.winner || "",
-  }));
+  // Assign sequential table numbers per round when the API doesn't provide them
+  const tableCounters = {};
+  const pairingRows = pairingsData.map((p) => {
+    let tbl = p.table;
+    if (tbl == null || tbl === 0) {
+      const key = `${p.round}-${p.phase || 1}`;
+      tableCounters[key] = (tableCounters[key] || 0) + 1;
+      tbl = tableCounters[key];
+    }
+    return {
+      tournamentId,
+      round: p.round,
+      phase: String(p.phase || 1),
+      table: tbl,
+      player1: p.player1 || "",
+      player2: p.player2 || "",
+      winner: p.winner || "",
+    };
+  });
   if (pairingRows.length > 0) await batchInsert(db, pairings, pairingRows);
 
   return { players: standingRows.length, cards: cardRows.length, pairings: pairingRows.length };

@@ -89,7 +89,9 @@
       "Bash(npx drizzle-kit generate:*)",
       "Bash(npx drizzle-kit push:*)",
       "Bash(npx dotenv:*)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(test:*)",
+      "WebFetch(domain:www.tcglive.be)"
     ]
   }
 }

@@ -24,5 +24,5 @@ export default async function handler() {
 }
 
 export const config: Config = {
-  schedule: "0 6 * * *", // Daily at 6 AM UTC
+  schedule: "0 23 * * 1-3", // Mon-Wed at 6 PM EST (11 PM UTC)
 };

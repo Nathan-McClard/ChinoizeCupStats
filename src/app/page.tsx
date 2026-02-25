@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { getDashboardStats, getRecentTournaments } from "@/lib/queries/tournaments";
 import { getLeaderStats, getMetaShareData } from "@/lib/queries/leaders";
-import { getCurrentFormat, getAllFormats, getFormatBySetCode } from "@/lib/queries/formats";
+import { resolveFormatFilter } from "@/lib/queries/formats";
 import { PageTransition } from "@/components/ui/page-transition";
 import { FormatSelector } from "@/components/ui/format-selector";
 import { HeroStats } from "@/components/dashboard/hero-stats";
@@ -16,29 +16,16 @@ interface DashboardPageProps {
 
 export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const params = await searchParams;
-  const formatParam = params.format;
 
-  const [currentFormat, allFormats] = await Promise.all([
-    getCurrentFormat(),
-    getAllFormats(),
-  ]);
-
-  // Resolve active format based on URL param
-  let activeFormat = currentFormat;
-  if (formatParam === "all") {
-    activeFormat = null;
-  } else if (formatParam && formatParam !== currentFormat?.setCode) {
-    activeFormat = await getFormatBySetCode(formatParam);
-  }
-
-  const formatIds = activeFormat?.tournamentIds;
+  const { tournamentIds, activeFormat, activeFormatValue, formatOptions, currentFormatCode } =
+    await resolveFormatFilter(params.format);
 
   const [dashboardStats, recentTournaments, leaderStats, metaShareData] =
     await Promise.all([
-      getDashboardStats(formatIds),
-      getRecentTournaments(10, formatIds),
-      getLeaderStats(formatIds),
-      getMetaShareData(formatIds),
+      getDashboardStats(tournamentIds),
+      getRecentTournaments(10, tournamentIds),
+      getLeaderStats(tournamentIds),
+      getMetaShareData(tournamentIds),
     ]);
 
   // Top 6 leaders by tier ranking (leaderStats is already sorted by composite score)
@@ -78,14 +65,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       : null,
   }));
 
-  const formatOptions = allFormats.map((f) => ({
-    setCode: f.setCode,
-    displayName: f.displayName,
-    tournamentCount: f.tournamentIds.length,
-  }));
-
-  const activeFormatValue = formatParam === "all" ? "all" : (activeFormat?.setCode ?? currentFormat?.setCode ?? "all");
-
   return (
     <PageTransition>
       <div className="space-y-10 lg:space-y-14">
@@ -94,7 +73,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           <div className="flex justify-end">
             <FormatSelector
               formats={formatOptions}
-              currentFormatCode={currentFormat?.setCode ?? ""}
+              currentFormatCode={currentFormatCode}
               value={activeFormatValue}
             />
           </div>
@@ -102,7 +81,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             totalTournaments={dashboardStats.totalTournaments}
             uniquePlayers={dashboardStats.uniquePlayerCount}
             uniqueLeaders={uniqueLeaders}
-            formatName={activeFormat?.displayName ?? (formatParam === "all" ? "All Time" : null)}
+            formatName={activeFormat?.displayName ?? (params.format === "all" ? "All Time" : null)}
             latestTournament={latestTournament}
           />
         </div>

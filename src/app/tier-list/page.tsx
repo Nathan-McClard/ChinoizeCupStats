@@ -1,9 +1,5 @@
 import { getLeaderStats } from "@/lib/queries/leaders";
-import {
-  getCurrentFormat,
-  getAllFormats,
-  getFormatBySetCode,
-} from "@/lib/queries/formats";
+import { resolveFormatFilter } from "@/lib/queries/formats";
 import { LeaderRankings } from "@/components/tier-list/leader-rankings";
 import { RankingInfo } from "@/components/tier-list/ranking-info";
 import { PageTransition } from "@/components/ui/page-transition";
@@ -19,32 +15,11 @@ export default async function TierListPage({
   searchParams,
 }: TierListPageProps) {
   const params = await searchParams;
-  const formatParam = params.format;
 
-  const [currentFormat, allFormats] = await Promise.all([
-    getCurrentFormat(),
-    getAllFormats(),
-  ]);
+  const { tournamentIds, activeFormatValue, formatOptions, currentFormatCode } =
+    await resolveFormatFilter(params.format);
 
-  let activeFormat = currentFormat;
-  if (formatParam === "all") {
-    activeFormat = null;
-  } else if (formatParam && formatParam !== currentFormat?.setCode) {
-    activeFormat = await getFormatBySetCode(formatParam);
-  }
-
-  const leaders = await getLeaderStats(activeFormat?.tournamentIds);
-
-  const formatOptions = allFormats.map((f) => ({
-    setCode: f.setCode,
-    displayName: f.displayName,
-    tournamentCount: f.tournamentIds.length,
-  }));
-
-  const activeFormatValue =
-    formatParam === "all"
-      ? "all"
-      : (activeFormat?.setCode ?? currentFormat?.setCode ?? "all");
+  const leaders = await getLeaderStats(tournamentIds);
 
   return (
     <PageTransition>
@@ -64,7 +39,7 @@ export default async function TierListPage({
           </div>
           <FormatSelector
             formats={formatOptions}
-            currentFormatCode={currentFormat?.setCode ?? ""}
+            currentFormatCode={currentFormatCode}
             value={activeFormatValue}
           />
         </div>

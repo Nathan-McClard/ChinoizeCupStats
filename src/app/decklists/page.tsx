@@ -3,11 +3,7 @@ export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { getGroupedDecklists } from "@/lib/queries/decklists";
 import { getLeaderStats } from "@/lib/queries/leaders";
-import {
-  getCurrentFormat,
-  getAllFormats,
-  getFormatBySetCode,
-} from "@/lib/queries/formats";
+import { resolveFormatFilter } from "@/lib/queries/formats";
 import { PageTransition } from "@/components/ui/page-transition";
 import { FormatSelector } from "@/components/ui/format-selector";
 import { LeaderPicker } from "@/components/decklists/leader-picker";
@@ -26,31 +22,8 @@ export default async function DecklistsPage({
 }: DecklistsPageProps) {
   const params = await searchParams;
 
-  // Format resolution (same pattern as tier-list/page.tsx)
-  const [currentFormat, allFormats] = await Promise.all([
-    getCurrentFormat(),
-    getAllFormats(),
-  ]);
-
-  let activeFormat = currentFormat;
-  if (params.format === "all") {
-    activeFormat = null;
-  } else if (params.format && params.format !== currentFormat?.setCode) {
-    activeFormat = await getFormatBySetCode(params.format);
-  }
-
-  const formatTournamentIds = activeFormat?.tournamentIds;
-
-  const formatOptions = allFormats.map((f) => ({
-    setCode: f.setCode,
-    displayName: f.displayName,
-    tournamentCount: f.tournamentIds.length,
-  }));
-
-  const activeFormatValue =
-    params.format === "all"
-      ? "all"
-      : (activeFormat?.setCode ?? currentFormat?.setCode ?? "all");
+  const { tournamentIds, activeFormatValue, formatOptions, currentFormatCode } =
+    await resolveFormatFilter(params.format);
 
   // Format param for preserving in links
   const formatParam =
@@ -59,8 +32,8 @@ export default async function DecklistsPage({
   if (params.deckId) {
     // ── Archetype mode ──────────────────────────────────────────────
     const [archetypes, leaderStats] = await Promise.all([
-      getGroupedDecklists(params.deckId, formatTournamentIds),
-      getLeaderStats(formatTournamentIds),
+      getGroupedDecklists(params.deckId, tournamentIds),
+      getLeaderStats(tournamentIds),
     ]);
 
     const leader = leaderStats.find((l) => l.deckId === params.deckId);
@@ -84,7 +57,7 @@ export default async function DecklistsPage({
             </div>
             <FormatSelector
               formats={formatOptions}
-              currentFormatCode={currentFormat?.setCode ?? ""}
+              currentFormatCode={currentFormatCode}
               value={activeFormatValue}
             />
           </div>
@@ -118,7 +91,7 @@ export default async function DecklistsPage({
   }
 
   // ── Landing mode — leader picker ──────────────────────────────────
-  const leaderStats = await getLeaderStats(formatTournamentIds);
+  const leaderStats = await getLeaderStats(tournamentIds);
 
   const leaders = leaderStats
     .filter((l) => l.totalEntries > 0)
@@ -147,7 +120,7 @@ export default async function DecklistsPage({
           </div>
           <FormatSelector
             formats={formatOptions}
-            currentFormatCode={currentFormat?.setCode ?? ""}
+            currentFormatCode={currentFormatCode}
             value={activeFormatValue}
           />
         </div>

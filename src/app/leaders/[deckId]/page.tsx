@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getLeaderStats, getLeaderNameMap, getLeaderDetail, getLeaderTrends, getMatchupData } from "@/lib/queries/leaders";
-import { getCurrentFormat, getAllFormats } from "@/lib/queries/formats";
+import { resolveFormatFilter, getAllFormats } from "@/lib/queries/formats";
 import type { MatchupMatrix } from "@/lib/queries/leaders";
 import { getTopDecklists } from "@/lib/queries/decklists";
 import { getDecklistForPlayer } from "@/lib/queries/cards";
@@ -23,10 +23,10 @@ export default async function LeaderDetailPage({ params }: LeaderDetailPageProps
   const decodedDeckId = decodeURIComponent(deckId);
 
   // Use current format for tier/stat calculations, all-time for detail/trends
-  const format = await getCurrentFormat();
+  const { tournamentIds, currentFormatCode } = await resolveFormatFilter();
 
   const [allLeaders, leadersMap, detail, trends, matchups, decklists, allFormats] = await Promise.all([
-    getLeaderStats(format?.tournamentIds),
+    getLeaderStats(tournamentIds),
     getLeaderNameMap(),
     getLeaderDetail(decodedDeckId),
     getLeaderTrends(decodedDeckId),
@@ -131,7 +131,7 @@ export default async function LeaderDetailPage({ params }: LeaderDetailPageProps
               displayName: f.displayName,
               tournamentIds: f.tournamentIds,
             }))}
-            currentFormatCode={format?.setCode ?? ""}
+            currentFormatCode={currentFormatCode}
           />
         </div>
       </div>

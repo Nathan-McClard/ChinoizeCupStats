@@ -2,11 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { getMetaTrends, getWinRateTrends } from "@/lib/queries/trends";
 import { getLeaderStats } from "@/lib/queries/leaders";
-import {
-  getCurrentFormat,
-  getAllFormats,
-  getFormatBySetCode,
-} from "@/lib/queries/formats";
+import { resolveFormatFilter } from "@/lib/queries/formats";
 import { PageTransition } from "@/components/ui/page-transition";
 import { FormatSelector } from "@/components/ui/format-selector";
 import { MetaShareStacked } from "@/components/trends/meta-share-stacked";
@@ -19,24 +15,13 @@ interface TrendsPageProps {
 export default async function TrendsPage({ searchParams }: TrendsPageProps) {
   const params = await searchParams;
 
-  const [currentFormat, allFormats] = await Promise.all([
-    getCurrentFormat(),
-    getAllFormats(),
-  ]);
-
-  let activeFormat = currentFormat;
-  if (params.format === "all") {
-    activeFormat = null;
-  } else if (params.format && params.format !== currentFormat?.setCode) {
-    activeFormat = await getFormatBySetCode(params.format);
-  }
-
-  const formatTournamentIds = activeFormat?.tournamentIds;
+  const { tournamentIds, activeFormatValue, formatOptions, currentFormatCode } =
+    await resolveFormatFilter(params.format);
 
   const [metaTrends, winRateTrends, leaderStats] = await Promise.all([
-    getMetaTrends(formatTournamentIds),
-    getWinRateTrends(formatTournamentIds),
-    getLeaderStats(formatTournamentIds),
+    getMetaTrends(tournamentIds),
+    getWinRateTrends(tournamentIds),
+    getLeaderStats(tournamentIds),
   ]);
 
   const sortedLeaders = [...leaderStats].sort(
@@ -53,17 +38,6 @@ export default async function TrendsPage({ searchParams }: TrendsPageProps) {
     leaderName: l.leaderName,
   }));
 
-  const formatOptions = allFormats.map((f) => ({
-    setCode: f.setCode,
-    displayName: f.displayName,
-    tournamentCount: f.tournamentIds.length,
-  }));
-
-  const activeFormatValue =
-    params.format === "all"
-      ? "all"
-      : (activeFormat?.setCode ?? currentFormat?.setCode ?? "all");
-
   return (
     <PageTransition>
       <div className="max-w-7xl mx-auto space-y-6">
@@ -79,7 +53,7 @@ export default async function TrendsPage({ searchParams }: TrendsPageProps) {
           </div>
           <FormatSelector
             formats={formatOptions}
-            currentFormatCode={currentFormat?.setCode ?? ""}
+            currentFormatCode={currentFormatCode}
             value={activeFormatValue}
           />
         </div>

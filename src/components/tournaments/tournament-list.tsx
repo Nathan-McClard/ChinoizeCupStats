@@ -12,6 +12,7 @@ interface TournamentListItem {
   name: string;
   date: string;
   playerCount: number;
+  isSpecialEvent?: boolean;
   winner?: {
     displayName: string;
     leaderName: string | null;
@@ -106,9 +107,16 @@ export function TournamentList({ tournaments }: TournamentListProps) {
                 </div>
 
                 {/* Tournament name */}
-                <h3 className="text-sm font-semibold text-foreground leading-tight group-hover:text-primary transition-colors">
-                  {tournament.name}
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-foreground leading-tight group-hover:text-primary transition-colors">
+                    {tournament.name}
+                  </h3>
+                  {tournament.isSpecialEvent && (
+                    <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wide text-warning bg-warning/10 px-1.5 py-0.5 rounded-md">
+                      Special
+                    </span>
+                  )}
+                </div>
 
                 {/* Winner row */}
                 {tournament.winner ? (

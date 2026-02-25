@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { getMostPlayedCards } from "@/lib/queries/cards";
-import { getCurrentFormat, getAllFormats, getFormatBySetCode } from "@/lib/queries/formats";
+import { resolveFormatFilter } from "@/lib/queries/formats";
 import { PageTransition } from "@/components/ui/page-transition";
 import { FormatSelector } from "@/components/ui/format-selector";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -15,30 +15,13 @@ interface CardsPageProps {
 
 export default async function CardsPage({ searchParams }: CardsPageProps) {
   const params = await searchParams;
-  const formatParam = params.format;
 
-  const [currentFormat, allFormats] = await Promise.all([
-    getCurrentFormat(),
-    getAllFormats(),
-  ]);
+  const { tournamentIds, activeFormat, activeFormatValue, formatOptions, currentFormatCode } =
+    await resolveFormatFilter(params.format);
 
-  let activeFormat = currentFormat;
-  if (formatParam === "all") {
-    activeFormat = null;
-  } else if (formatParam && formatParam !== currentFormat?.setCode) {
-    activeFormat = await getFormatBySetCode(formatParam);
-  }
+  const cards = await getMostPlayedCards(100, tournamentIds);
 
-  const cards = await getMostPlayedCards(100, activeFormat?.tournamentIds);
-
-  const formatOptions = allFormats.map((f) => ({
-    setCode: f.setCode,
-    displayName: f.displayName,
-    tournamentCount: f.tournamentIds.length,
-  }));
-
-  const activeFormatValue = formatParam === "all" ? "all" : (activeFormat?.setCode ?? currentFormat?.setCode ?? "all");
-  const displayFormatName = activeFormat?.displayName ?? (formatParam === "all" ? "All Time" : null);
+  const displayFormatName = activeFormat?.displayName ?? (params.format === "all" ? "All Time" : null);
 
   const totalUniqueCards = cards.length;
   const avgCopiesPerCard =
@@ -62,7 +45,7 @@ export default async function CardsPage({ searchParams }: CardsPageProps) {
           </div>
           <FormatSelector
             formats={formatOptions}
-            currentFormatCode={currentFormat?.setCode ?? ""}
+            currentFormatCode={currentFormatCode}
             value={activeFormatValue}
           />
         </div>

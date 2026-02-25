@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { sql } from "drizzle-orm";
+import { SPECIAL_EVENT_NAMES } from "@/lib/config/special-events";
 
 /**
  * Sets to exclude from format detection and the format selector.
@@ -121,4 +122,116 @@ export async function getFormatBySetCode(
 /** Format set code for display: "OP14" → "OP-14", "EB03" → "EB-03" */
 export function formatSetCode(code: string): string {
   return code.replace(/^(OP|EB|ST)(\d+)$/, "$1-$2");
+}
+
+/** SQL fragment to exclude special event tournaments by name */
+function specialEventExclusion(tableAlias: string = "t") {
+  if (SPECIAL_EVENT_NAMES.length === 0) return sql`true`;
+  const conditions = SPECIAL_EVENT_NAMES.map(
+    (name) => sql`${sql.raw(tableAlias)}.name NOT ILIKE ${"%" + name + "%"}`
+  );
+  return sql.join(conditions, sql` AND `);
+}
+
+/**
+ * Get all standard (non-special-event) tournament IDs.
+ * Used for "All Time" mode to still exclude special events from stats.
+ */
+export async function getStandardTournamentIds(): Promise<string[]> {
+  if (SPECIAL_EVENT_NAMES.length === 0) return [];
+
+  const rows = (await db.execute(sql`
+    SELECT id FROM tournaments
+    WHERE ${specialEventExclusion("tournaments")}
+  `)) as unknown as Array<{ id: string }>;
+
+  return rows.map((r) => r.id);
+}
+
+export interface ResolvedFormat {
+  /** Tournament IDs to pass to query functions (undefined = no filter needed) */
+  tournamentIds: string[] | undefined;
+  /** The active format info, or null for "All Time" */
+  activeFormat: FormatInfo | null;
+  /** Value for the FormatSelector component */
+  activeFormatValue: string;
+  /** All formats for the FormatSelector */
+  formatOptions: { setCode: string; displayName: string; tournamentCount: number }[];
+  /** Current format code */
+  currentFormatCode: string;
+}
+
+/**
+ * Shared format resolution logic used by all pages.
+ * Always excludes special event tournaments from the returned tournamentIds.
+ */
+export async function resolveFormatFilter(
+  formatParam?: string
+): Promise<ResolvedFormat> {
+  const [currentFormat, allFormats] = await Promise.all([
+    getCurrentFormat(),
+    getAllFormats(),
+  ]);
+
+  let activeFormat = currentFormat;
+  if (formatParam === "all") {
+    activeFormat = null;
+  } else if (formatParam && formatParam !== currentFormat?.setCode) {
+    activeFormat = await getFormatBySetCode(formatParam);
+  }
+
+  let tournamentIds: string[] | undefined;
+
+  if (activeFormat) {
+    // Format-specific: filter out special event tournaments from format IDs
+    if (SPECIAL_EVENT_NAMES.length > 0) {
+      const excludedIds = await getSpecialEventIds();
+      const excluded = new Set(excludedIds);
+      tournamentIds = activeFormat.tournamentIds.filter((id) => !excluded.has(id));
+    } else {
+      tournamentIds = activeFormat.tournamentIds;
+    }
+  } else {
+    // "All Time": get all IDs except special events
+    if (SPECIAL_EVENT_NAMES.length > 0) {
+      tournamentIds = await getStandardTournamentIds();
+    } else {
+      tournamentIds = undefined;
+    }
+  }
+
+  const formatOptions = allFormats.map((f) => ({
+    setCode: f.setCode,
+    displayName: f.displayName,
+    tournamentCount: f.tournamentIds.length,
+  }));
+
+  const activeFormatValue =
+    formatParam === "all"
+      ? "all"
+      : (activeFormat?.setCode ?? currentFormat?.setCode ?? "all");
+
+  return {
+    tournamentIds,
+    activeFormat,
+    activeFormatValue,
+    formatOptions,
+    currentFormatCode: currentFormat?.setCode ?? "",
+  };
+}
+
+/** Get IDs of all special event tournaments */
+async function getSpecialEventIds(): Promise<string[]> {
+  if (SPECIAL_EVENT_NAMES.length === 0) return [];
+
+  const conditions = SPECIAL_EVENT_NAMES.map(
+    (name) => sql`tournaments.name ILIKE ${"%" + name + "%"}`
+  );
+  const whereClause = sql.join(conditions, sql` OR `);
+
+  const rows = (await db.execute(sql`
+    SELECT id FROM tournaments WHERE ${whereClause}
+  `)) as unknown as Array<{ id: string }>;
+
+  return rows.map((r) => r.id);
 }

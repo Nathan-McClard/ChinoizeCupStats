@@ -1,7 +1,7 @@
 import { getRecentTournaments } from "@/lib/queries/tournaments";
+import { isSpecialEvent } from "@/lib/config/special-events";
 import { PageTransition } from "@/components/ui/page-transition";
 import { TournamentList } from "@/components/tournaments/tournament-list";
-import { Trophy } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +13,7 @@ export default async function TournamentsPage() {
     name: t.name,
     date: t.date,
     playerCount: t.playerCount,
+    isSpecialEvent: isSpecialEvent(t.name),
     winner: t.winner
       ? {
           displayName: t.winner.displayName,

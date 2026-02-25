@@ -91,7 +91,9 @@
       "Bash(npx dotenv:*)",
       "Bash(echo:*)",
       "Bash(test:*)",
-      "WebFetch(domain:www.tcglive.be)"
+      "WebFetch(domain:www.tcglive.be)",
+      "Bash(ls:*)",
+      "Bash(cd D:\\\\_Projects\\\\ChinoizeStats:*)"
     ]
   }
 }

@@ -1,5 +1,5 @@
 import { getPlayerLeaderboard } from "@/lib/queries/players";
-import { getCurrentFormat, getAllFormats, getFormatBySetCode } from "@/lib/queries/formats";
+import { resolveFormatFilter } from "@/lib/queries/formats";
 import { PageTransition } from "@/components/ui/page-transition";
 import { FormatSelector } from "@/components/ui/format-selector";
 import { PlayerLeaderboardTable } from "@/components/players/player-leaderboard-table";
@@ -12,30 +12,13 @@ interface PlayersPageProps {
 
 export default async function PlayersPage({ searchParams }: PlayersPageProps) {
   const params = await searchParams;
-  const formatParam = params.format;
 
-  const [currentFormat, allFormats] = await Promise.all([
-    getCurrentFormat(),
-    getAllFormats(),
-  ]);
+  const { tournamentIds, activeFormat, activeFormatValue, formatOptions, currentFormatCode } =
+    await resolveFormatFilter(params.format);
 
-  let activeFormat = currentFormat;
-  if (formatParam === "all") {
-    activeFormat = null;
-  } else if (formatParam && formatParam !== currentFormat?.setCode) {
-    activeFormat = await getFormatBySetCode(formatParam);
-  }
+  const players = await getPlayerLeaderboard(tournamentIds);
 
-  const players = await getPlayerLeaderboard(activeFormat?.tournamentIds);
-
-  const formatOptions = allFormats.map((f) => ({
-    setCode: f.setCode,
-    displayName: f.displayName,
-    tournamentCount: f.tournamentIds.length,
-  }));
-
-  const activeFormatValue = formatParam === "all" ? "all" : (activeFormat?.setCode ?? currentFormat?.setCode ?? "all");
-  const displayFormatName = activeFormat?.displayName ?? (formatParam === "all" ? "All Time" : null);
+  const displayFormatName = activeFormat?.displayName ?? (params.format === "all" ? "All Time" : null);
 
   return (
     <PageTransition>
@@ -53,7 +36,7 @@ export default async function PlayersPage({ searchParams }: PlayersPageProps) {
           </div>
           <FormatSelector
             formats={formatOptions}
-            currentFormatCode={currentFormat?.setCode ?? ""}
+            currentFormatCode={currentFormatCode}
             value={activeFormatValue}
           />
         </div>

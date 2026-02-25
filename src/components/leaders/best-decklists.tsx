@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Layers, Trophy, ArrowRight } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { getLeaderImageUrl } from "@/components/ui/leader-icon";
+import { isSpecialEvent } from "@/lib/config/special-events";
 import {
   Select,
   SelectContent,
@@ -280,10 +281,17 @@ export function BestDecklists({
               <CardGrid cards={entry.cards} />
 
               {/* Tournament info */}
-              <div className="mt-1.5 text-[11px] text-muted-foreground">
-                {entry.tournamentName}{" "}
-                <span className="text-muted-foreground/40">&middot;</span>{" "}
-                {formatDate(entry.tournamentDate)}
+              <div className="mt-1.5 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                <span>
+                  {entry.tournamentName}{" "}
+                  <span className="text-muted-foreground/40">&middot;</span>{" "}
+                  {formatDate(entry.tournamentDate)}
+                </span>
+                {isSpecialEvent(entry.tournamentName) && (
+                  <span className="shrink-0 text-[9px] font-semibold uppercase tracking-wide text-warning bg-warning/10 px-1 py-px rounded">
+                    Special
+                  </span>
+                )}
               </div>
             </Link>
           ))}

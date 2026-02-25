@@ -17,9 +17,11 @@ export function CopyForSim({ cards }: CopyForSimProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = useCallback(() => {
-    const lines = cards
-      .filter((c) => c.cardType !== "Leader")
-      .map((c) => `${c.count}x${c.cardSet}-${c.cardNumber}`);
+    const leader = cards.filter((c) => c.cardType === "Leader");
+    const rest = cards.filter((c) => c.cardType !== "Leader" && c.cardType !== "DON!!");
+    const lines = [...leader, ...rest].map(
+      (c) => `${c.count}x${c.cardSet}-${c.cardNumber}`
+    );
     navigator.clipboard.writeText(lines.join("\n")).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);

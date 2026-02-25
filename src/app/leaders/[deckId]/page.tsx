@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -11,8 +12,26 @@ import { LeaderHero } from "@/components/leaders/leader-hero";
 import { PerformanceChart } from "@/components/leaders/performance-chart";
 import { MatchupChart } from "@/components/leaders/matchup-chart";
 import { BestDecklists } from "@/components/leaders/best-decklists";
+import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: LeaderDetailPageProps): Promise<Metadata> {
+  const { deckId } = await params;
+  const decodedDeckId = decodeURIComponent(deckId);
+  const { tournamentIds } = await resolveFormatFilter();
+  const allLeaders = await getLeaderStats(tournamentIds);
+  const leader = allLeaders.find((l) => l.deckId === decodedDeckId);
+  if (!leader) return { title: "Leader Not Found" };
+  return {
+    title: leader.leaderName,
+    description: `${leader.leaderName} — ${leader.tier}-tier, ${(leader.winRate * 100).toFixed(1)}% win rate, ${leader.totalEntries} tournament entries.`,
+    alternates: { canonical: `/leaders/${deckId}` },
+    openGraph: { title: leader.leaderName },
+  };
+}
 
 interface LeaderDetailPageProps {
   params: Promise<{ deckId: string }>;
@@ -84,6 +103,12 @@ export default async function LeaderDetailPage({ params }: LeaderDetailPageProps
 
   return (
     <PageTransition>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Tier List", href: "/tier-list" },
+          { name: leader.leaderName, href: `/leaders/${deckId}` },
+        ]}
+      />
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Back Link */}
         <Link

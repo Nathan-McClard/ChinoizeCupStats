@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   getTournamentById,
   getTournamentStandings,
@@ -6,11 +7,29 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { StandingsTable } from "@/components/tournaments/standings-table";
 import { TournamentMetaPie } from "@/components/tournaments/tournament-meta-pie";
 import { TournamentHero } from "@/components/tournaments/tournament-hero";
+import { BreadcrumbJsonLd, SportsEventJsonLd } from "@/components/seo/json-ld";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Trophy } from "lucide-react";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: TournamentDetailPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const tournament = await getTournamentById(id);
+  if (!tournament) return { title: "Tournament Not Found" };
+  const playerLabel = tournament.playerCount
+    ? ` — ${tournament.playerCount} players`
+    : "";
+  return {
+    title: tournament.name,
+    description: `Results and standings for ${tournament.name}${playerLabel}.`,
+    alternates: { canonical: `/tournaments/${id}` },
+    openGraph: { title: tournament.name },
+  };
+}
 
 interface TournamentDetailPageProps {
   params: Promise<{ id: string }>;
@@ -55,6 +74,18 @@ export default async function TournamentDetailPage({
 
   return (
     <PageTransition>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Tournaments", href: "/tournaments" },
+          { name: tournament.name, href: `/tournaments/${id}` },
+        ]}
+      />
+      <SportsEventJsonLd
+        name={tournament.name}
+        date={tournament.date}
+        url={`/tournaments/${id}`}
+        playerCount={tournament.playerCount}
+      />
       <div className="space-y-6">
         {/* Back link */}
         <Link

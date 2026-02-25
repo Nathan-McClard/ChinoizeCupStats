@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getLeaderStats } from "@/lib/queries/leaders";
 import { resolveFormatFilter } from "@/lib/queries/formats";
 import { LeaderRankings } from "@/components/tier-list/leader-rankings";
@@ -6,6 +7,13 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { FormatSelector } from "@/components/ui/format-selector";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Tier List",
+  description:
+    "One Piece TCG leader tier rankings based on win rate, top cut rate, and tournament wins across ChinoizeCup events.",
+  alternates: { canonical: "/tier-list" },
+};
 
 interface TierListPageProps {
   searchParams: Promise<{ format?: string }>;

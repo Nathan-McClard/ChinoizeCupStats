@@ -1,6 +1,14 @@
 export const dynamic = "force-dynamic";
 
+import type { Metadata } from "next";
 import { getMetaTrends, getWinRateTrends } from "@/lib/queries/trends";
+
+export const metadata: Metadata = {
+  title: "Meta Trends",
+  description:
+    "Historical meta share and win rate trends for top One Piece TCG leaders across ChinoizeCup tournaments.",
+  alternates: { canonical: "/trends" },
+};
 import { getLeaderStats } from "@/lib/queries/leaders";
 import { resolveFormatFilter } from "@/lib/queries/formats";
 import { PageTransition } from "@/components/ui/page-transition";

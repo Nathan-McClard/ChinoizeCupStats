@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { db } from "@/lib/db";
 import { sql } from "drizzle-orm";
 import { SPECIAL_EVENT_NAMES } from "@/lib/config/special-events";
@@ -165,9 +166,9 @@ export interface ResolvedFormat {
  * Shared format resolution logic used by all pages.
  * Always excludes special event tournaments from the returned tournamentIds.
  */
-export async function resolveFormatFilter(
+export const resolveFormatFilter = cache(async (
   formatParam?: string
-): Promise<ResolvedFormat> {
+): Promise<ResolvedFormat> => {
   const [currentFormat, allFormats] = await Promise.all([
     getCurrentFormat(),
     getAllFormats(),
@@ -218,7 +219,7 @@ export async function resolveFormatFilter(
     formatOptions,
     currentFormatCode: currentFormat?.setCode ?? "",
   };
-}
+});
 
 /** Get IDs of all special event tournaments */
 async function getSpecialEventIds(): Promise<string[]> {

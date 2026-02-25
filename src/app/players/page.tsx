@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getPlayerLeaderboard } from "@/lib/queries/players";
 import { resolveFormatFilter } from "@/lib/queries/formats";
 import { PageTransition } from "@/components/ui/page-transition";
@@ -5,6 +6,13 @@ import { FormatSelector } from "@/components/ui/format-selector";
 import { PlayerLeaderboardTable } from "@/components/players/player-leaderboard-table";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Players",
+  description:
+    "Player leaderboard ranked by tournament points, win rate, and top cut finishes across ChinoizeCup events.",
+  alternates: { canonical: "/players" },
+};
 
 interface PlayersPageProps {
   searchParams: Promise<{ format?: string }>;

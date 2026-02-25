@@ -1,9 +1,17 @@
+import type { Metadata } from "next";
 import { getRecentTournaments } from "@/lib/queries/tournaments";
 import { isSpecialEvent } from "@/lib/config/special-events";
 import { PageTransition } from "@/components/ui/page-transition";
 import { TournamentList } from "@/components/tournaments/tournament-list";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Tournaments",
+  description:
+    "Browse all ChinoizeCup One Piece TCG tournament results, winners, and standings.",
+  alternates: { canonical: "/tournaments" },
+};
 
 export default async function TournamentsPage() {
   const tournaments = await getRecentTournaments(100);

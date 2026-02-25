@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { db } from "@/lib/db";
 import { standings, tournaments } from "@/lib/db/schema";
 import { sql, eq, desc, and, inArray } from "drizzle-orm";
@@ -18,7 +19,7 @@ export interface PlayerLeaderboardRow {
   rank: number;
 }
 
-export async function getPlayerLeaderboard(tournamentIds?: string[]): Promise<PlayerLeaderboardRow[]> {
+export const getPlayerLeaderboard = cache(async (tournamentIds?: string[]): Promise<PlayerLeaderboardRow[]> => {
   const tFilter = tournamentIds && tournamentIds.length > 0
     ? inArray(standings.tournamentId, tournamentIds)
     : undefined;
@@ -86,7 +87,7 @@ export async function getPlayerLeaderboard(tournamentIds?: string[]): Promise<Pl
   });
 
   return players;
-}
+});
 
 export async function getPlayerDetail(player: string) {
   const playerStandings = await db

@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { db } from "@/lib/db";
 import { tournaments, standings } from "@/lib/db/schema";
 import { desc, eq, count, sql, and, isNull, inArray } from "drizzle-orm";
@@ -8,11 +9,11 @@ export async function getAllTournaments() {
   });
 }
 
-export async function getTournamentById(id: string) {
+export const getTournamentById = cache(async (id: string) => {
   return db.query.tournaments.findFirst({
     where: eq(tournaments.id, id),
   });
-}
+});
 
 export async function getTournamentStandings(tournamentId: string) {
   return db.query.standings.findMany({

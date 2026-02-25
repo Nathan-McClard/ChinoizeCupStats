@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About - ChinoizeCupStats",
+  title: "About",
   description: "About ChinoizeCupStats, data sources, and acknowledgements",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutLayout({

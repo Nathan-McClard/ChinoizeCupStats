@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import type { Metadata } from "next";
 import { getDecklistEntry } from "@/lib/queries/decklists";
 import { getDecklistForPlayer } from "@/lib/queries/cards";
 import { PageTransition } from "@/components/ui/page-transition";
@@ -7,9 +8,26 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { LeaderIcon } from "@/components/ui/leader-icon";
 import { DecklistVisual } from "@/components/decklists/decklist-visual";
 import { CopyForSim } from "@/components/decklists/copy-for-sim";
+import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { SearchX } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import Link from "next/link";
+
+export async function generateMetadata({
+  params,
+}: DecklistDetailPageProps): Promise<Metadata> {
+  const { id, username } = await params;
+  const decodedUsername = decodeURIComponent(username);
+  const entry = await getDecklistEntry(id, decodedUsername);
+  if (!entry) return { title: "Decklist Not Found" };
+  const leader = entry.leaderName || "Unknown Leader";
+  return {
+    title: `${entry.displayName}'s ${leader} Decklist`,
+    description: `${entry.displayName}'s ${leader} decklist from ${entry.tournamentName} — #${entry.placing ?? "?"}, ${entry.wins}W-${entry.losses}L.`,
+    alternates: { canonical: `/decklists/${id}/${username}` },
+    openGraph: { title: `${entry.displayName} — ${leader}` },
+  };
+}
 
 interface DecklistDetailPageProps {
   params: Promise<{ id: string; username: string }>;
@@ -57,6 +75,12 @@ export default async function DecklistDetailPage({
 
   return (
     <PageTransition>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Decklists", href: "/decklists" },
+          { name: `${entry.displayName}'s Decklist`, href: `/decklists/${id}/${username}` },
+        ]}
+      />
       <div className="space-y-6">
         {/* Back link */}
         <Link

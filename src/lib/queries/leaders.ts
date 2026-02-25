@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { db } from "@/lib/db";
 import { standings, tournaments, pairings } from "@/lib/db/schema";
 import { eq, sql, desc, and, or, inArray } from "drizzle-orm";
@@ -24,7 +25,7 @@ export interface LeaderStats {
   compositeScore: number;
 }
 
-export async function getLeaderStats(tournamentIds?: string[]): Promise<LeaderStats[]> {
+export const getLeaderStats = cache(async (tournamentIds?: string[]): Promise<LeaderStats[]> => {
   const tFilter = tournamentIds && tournamentIds.length > 0
     ? inArray(standings.tournamentId, tournamentIds)
     : undefined;
@@ -133,7 +134,7 @@ export async function getLeaderStats(tournamentIds?: string[]): Promise<LeaderSt
   insufficient.sort((a, b) => b.compositeScore - a.compositeScore);
 
   return [...qualified, ...insufficient];
-}
+});
 
 export async function getLeaderDetail(deckId: string) {
   const leaderStandings = await db

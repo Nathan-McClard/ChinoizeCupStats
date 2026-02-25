@@ -1,6 +1,14 @@
 export const dynamic = "force-dynamic";
 
+import type { Metadata } from "next";
 import { getMostPlayedCards } from "@/lib/queries/cards";
+
+export const metadata: Metadata = {
+  title: "Card Analytics",
+  description:
+    "Most played cards across ChinoizeCup One Piece TCG tournaments with usage stats and type breakdowns.",
+  alternates: { canonical: "/cards" },
+};
 import { resolveFormatFilter } from "@/lib/queries/formats";
 import { PageTransition } from "@/components/ui/page-transition";
 import { FormatSelector } from "@/components/ui/format-selector";

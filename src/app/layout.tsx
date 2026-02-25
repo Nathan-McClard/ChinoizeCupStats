@@ -3,6 +3,8 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
+import { WebsiteJsonLd } from "@/components/seo/json-ld";
+import { siteConfig } from "@/lib/config/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -18,9 +20,20 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ChinoizeCupStats - One Piece TCG Meta Snapshot",
-  description:
-    "Tournament analytics and meta snapshot for ChinoizeCup One Piece TCG tournaments",
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: `${siteConfig.name} - One Piece TCG Meta Snapshot`,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: siteConfig.name,
+  },
+  twitter: {
+    card: "summary",
+  },
 };
 
 export default function RootLayout({
@@ -33,6 +46,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} flex min-h-screen`}
       >
+        <WebsiteJsonLd />
         <ThemeProvider>
           <Sidebar />
           <div className="flex-1 flex flex-col min-h-screen">

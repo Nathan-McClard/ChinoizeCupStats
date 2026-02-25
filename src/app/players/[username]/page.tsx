@@ -1,12 +1,30 @@
+import type { Metadata } from "next";
 import { getPlayerLeaderboard, getPlayerDetail } from "@/lib/queries/players";
 import { PageTransition } from "@/components/ui/page-transition";
 import { PlayerHeader } from "@/components/players/player-header";
 import { PlayerTournamentHistory } from "@/components/players/player-tournament-history";
 import { PlayerLeaderBreakdown } from "@/components/players/player-leader-breakdown";
+import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { Users } from "lucide-react";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: PlayerDetailPageProps): Promise<Metadata> {
+  const { username } = await params;
+  const decodedUsername = decodeURIComponent(username);
+  const leaderboard = await getPlayerLeaderboard();
+  const player = leaderboard.find((p) => p.player === decodedUsername);
+  if (!player) return { title: "Player Not Found" };
+  return {
+    title: player.displayName,
+    description: `${player.displayName} — ${player.tournamentsPlayed} tournaments, ${(player.winRate * 100).toFixed(0)}% win rate, best finish #${player.bestPlacing}.`,
+    alternates: { canonical: `/players/${username}` },
+    openGraph: { title: player.displayName },
+  };
+}
 
 interface PlayerDetailPageProps {
   params: Promise<{ username: string }>;
@@ -49,6 +67,12 @@ export default async function PlayerDetailPage({ params }: PlayerDetailPageProps
 
   return (
     <PageTransition>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Players", href: "/players" },
+          { name: player.displayName, href: `/players/${username}` },
+        ]}
+      />
       <div className="max-w-7xl mx-auto space-y-6">
         <PlayerHeader
           displayName={player.displayName}

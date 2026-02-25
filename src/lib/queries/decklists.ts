@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { db } from "@/lib/db";
 import { standings, tournaments } from "@/lib/db/schema";
 import { eq, and, asc, desc, sql, lte, isNotNull, ilike, inArray } from "drizzle-orm";
@@ -20,10 +21,10 @@ export interface DecklistEntry {
   leaderNumber: string | null;
 }
 
-export async function getDecklistEntry(
+export const getDecklistEntry = cache(async (
   tournamentId: string,
   player: string
-): Promise<DecklistEntry | null> {
+): Promise<DecklistEntry | null> => {
   const results = await db
     .select({
       tournamentId: standings.tournamentId,
@@ -49,7 +50,7 @@ export async function getDecklistEntry(
     .limit(1);
 
   return results[0] ?? null;
-}
+});
 
 export async function getTopDecklists(
   deckId: string,

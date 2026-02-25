@@ -1,6 +1,14 @@
 export const dynamic = "force-dynamic";
 
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Decklists",
+  description:
+    "Browse One Piece TCG decklists by leader from ChinoizeCup tournaments, grouped by archetype.",
+  alternates: { canonical: "/decklists" },
+};
 import { getGroupedDecklists } from "@/lib/queries/decklists";
 import { getLeaderStats } from "@/lib/queries/leaders";
 import { resolveFormatFilter } from "@/lib/queries/formats";
